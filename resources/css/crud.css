@@ -1,0 +1,361 @@
+/* --- FIX TABEL BIAR LURUS DAN RAPI --- */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-responsive table,
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-responsive th,
+.table-responsive td,
+.data-table th, 
+.data-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.table-responsive th,
+.data-table th {
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.table-responsive tr:hover,
+.data-table tr:hover {
+    background-color: var(--table-hover);
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-personal {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.badge-company {
+    background-color: rgba(14, 116, 144, 0.3);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-action {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-edit {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.btn-edit:hover {
+    background-color: #f59e0b;
+    color: #1e1b4b;
+}
+
+.btn-delete {
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.btn-delete:hover {
+    background-color: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 9px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.pagination-wrapper {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li a,
+.pagination li span {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    border: 1px solid var(--border-color);
+    display: block;
+    transition: all 0.2s ease;
+}
+
+.pagination li.active span {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.pagination li.disabled span {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* --- FORM STYLING --- */
+.crud-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.flex-1 {
+    flex: 1;
+    min-width: 250px;
+}
+
+.form-label {
+    color: var(--text-label);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form-control, .filter-select, .search-input {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    padding: 11px 16px;
+    border-radius: 10px;
+    color: var(--text-main);
+    font-size: 13px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .filter-select:focus, .search-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.filter-select {
+    cursor: pointer;
+}
+
+.filter-select option {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--error-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+/* Styling Scrollbar / Slider Horizontal Tabel */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: var(--bg-body);
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
+.table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-body);
+    overflow-x: auto;
+}
+
+/* --- CUSTOM FILE UPLOAD DESIGN --- */
+.file-upload-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.file-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.file-upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: var(--bg-body);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-wrapper:hover .file-upload-box {
+    border-color: var(--primary-blue);
+    background: var(--table-hover);
+    transform: translateY(-2px);
+}
+
+.file-upload-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+    transition: transform 0.3s ease;
+}
+
+.file-upload-wrapper:hover .file-upload-icon {
+    transform: translateY(-3px);
+}
+
+.file-upload-text {
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.file-upload-text span {
+    color: var(--primary-blue);
+    text-decoration: underline;
+}
+
+.file-upload-hint {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.file-selected-name {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--primary-blue);
+    font-weight: 600;
+    display: none;
+}
+
+#editor .ql-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 12px 0;
+    display: block;
+}
