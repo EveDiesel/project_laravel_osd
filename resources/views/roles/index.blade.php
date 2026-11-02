@@ -12,6 +12,24 @@
 
     <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
+    <style>
+        /* Memaksa ikon panah pagination jadi kecil */
+        .pagination-wrapper svg, 
+        .pagination-wrapper nav svg {
+            width: 14px !important;
+            height: 14px !important;
+            max-width: 14px !important;
+            max-height: 14px !important;
+            display: inline-block !important;
+        }
+        .pagination-wrapper nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+
+    {{ $roles->links() }}
 </head>
 <body class="dashboard-body">
 

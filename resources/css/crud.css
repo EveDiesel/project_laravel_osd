@@ -359,3 +359,89 @@ table.data-table {
     margin: 12px 0;
     display: block;
 }
+
+/* --- FIX PAGINATION SUPAYA PAS DENGAN TEMA OSEDU --- */
+/* --- PERBAIKAN TOTAL PAGINATION SUPAYA RAPI --- */
+.pagination-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Membungkus bagian teks informasi di kiri dan tombol di kanan */
+.pagination-wrapper nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Mengatur kotak list pagination */
+.pagination {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Tombol angka & panah */
+.pagination li a,
+.pagination li span {
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    transition: all 0.2s ease;
+}
+
+.pagination li a:hover {
+    background-color: var(--table-hover);
+    color: var(--text-main);
+    border-color: var(--primary-blue);
+}
+
+/* Halaman aktif */
+.pagination li.active span {
+    background-color: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+    font-weight: 600;
+}
+
+/* Tombol disabled */
+.pagination li.disabled span {
+    background-color: var(--bg-body);
+    opacity: 0.4;
+    cursor: not-allowed;
+    color: var(--text-muted);
+}
+
+/* Ukuran ikon panah SVG agar pas di tengah tombol */
+.pagination svg {
+    width: 14px !important;
+    height: 14px !important;
+    display: block;
+}
+
+/* Teks "Showing 1 to 10 of..." di sebelah kiri */
+.pagination-wrapper p, 
+.pagination-wrapper .text-sm {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 0;
+}
