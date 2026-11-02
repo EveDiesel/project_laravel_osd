@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseLevelController;
 use App\Http\Controllers\CourseContentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
 
     //OTHERS
     Route::resource('users', UserController::class);
-    Route::resource('roles', RoleController::class);    
+    Route::resource('roles', RoleController::class); 
+    Route::resource('permissions', PermissionController::class);
     Route::resource('entity', EntityController::class);
     Route::resource('course', CourseController::class);
     Route::resource('course-level', CourseLevelController::class);

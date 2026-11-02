@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Entity; // [TAMBAHAN] Memanggil Model Entity agar controller bisa mengakses tabel entities
+use App\Models\Entity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // [TAMBAHAN] Memanggil DB facade untuk menggunakan fitur Database Transaction
+use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;

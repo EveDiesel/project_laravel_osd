@@ -71,14 +71,6 @@
                     @role('Admin')
                         <p class="card-desc" style="margin-bottom: 20px; color: #94a3b8;">As an admin, you have full access to manage users, courses, and other administrative tasks.</p>
                     <div class="quick-stats">
-                        <a href="{{ route('entity.index') }}" class="stat-box">
-                            <h3>Manage Entities</h3>
-                            <p>Manage entity data</p>
-                        </a>
-                        <a href="{{ route('users.index') }}" class="stat-box">
-                            <h3>Manage Users</h3>
-                            <p>Manage users & role assignments</p>
-                        </a>
                     </div>
                     @endrole
                 </div>

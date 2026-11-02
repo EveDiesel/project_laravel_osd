@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -52,7 +53,9 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::findOrFail($id);
-        return view('roles.edit', compact('role'));
+        $permissions = Permission::all();
+        $rolePermissions = $role->permissions->pluck('name')->toArray(); 
+        return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
     /**
@@ -62,12 +65,15 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,' . $id,
+            'permissions' => 'array',
         ]);
 
         $role = Role::findOrFail($id);
         $role->update(['name' => $request->name]);
 
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
+        $role->syncPermissions($request->permissions ?? []);
+
+        return redirect()->route('roles.index')->with('success', 'Role and permissions updated successfully.');
     }
 
     /**
