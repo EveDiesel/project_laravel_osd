@@ -8,6 +8,8 @@ use App\Http\Controllers\CourseContentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('entity', EntityController::class);
     Route::resource('course', CourseController::class);
     Route::resource('course-level', CourseLevelController::class);
+    Route::resource('activity', ActivityController::class);
+    Route::resource('schedule', ScheduleController::class);
 });
 
 require __DIR__.'/auth.php';

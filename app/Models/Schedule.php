@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
-    //
+    protected $fillable = [
+        'activity_id',
+        'start_at',
+        'end_at',
+        'status',
+    ];
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class);
+    }
 }

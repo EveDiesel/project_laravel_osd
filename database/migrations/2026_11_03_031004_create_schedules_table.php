@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('activity_id');
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
             $table->timestamp('start_at');
             $table->timestamp('end_at');
-
-            $table->boolean('status')->default(true);
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

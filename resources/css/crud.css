@@ -1,7 +1,110 @@
-/* --- FIX TABEL BIAR LURUS DAN RAPI --- */
+/* =================================================================
+   1. LAYOUT UTAMA, NAVBAR, SIDEBAR & MAIN CONTENT
+   =================================================================== */
+body.dashboard-body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-body, #0b0f19);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main, #f8fafc);
+}
+
+/* Top Navbar */
+.navbar-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: var(--bg-card, #0f172a);
+    border-bottom: 1px solid var(--border-color, #1e293b);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 101;
+    box-sizing: border-box;
+}
+
+/* Layout Utama */
+.app-layout {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    height: calc(100vh - 70px);
+    position: fixed;
+    left: 0;
+    top: 70px;
+    background-color: var(--bg-card, #0f172a);
+    border-right: 1px solid var(--border-color, #1e293b);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.sidebar-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.sidebar-scroll-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.sidebar-footer {
+    flex-shrink: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: inherit;
+    padding: 15px 20px;
+}
+
+/* Main Content Area (Agar melebar penuh di sebelah kanan sidebar) */
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    padding: 24px;
+    background-color: var(--bg-body, #0b0f19);
+    min-height: calc(100vh - 70px);
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Dashboard & CRUD Card */
+.dashboard-card, 
+.crud-card, 
+.card {
+    width: 100%;
+    background-color: var(--bg-card, #0f172a);
+    border: 1px solid var(--border-color, #1e293b);
+    border-radius: 16px;
+    padding: 24px;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+}
+
+
+/* =================================================================
+   2. TABEL & RESPONSIF TABEL
+   =================================================================== */
 .table-responsive {
     overflow-x: auto;
     width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-body);
 }
 
 .table-responsive table,
@@ -17,16 +120,16 @@ table.data-table {
 .data-table td {
     padding: 12px 16px;
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color, #1e293b);
     vertical-align: middle;
     font-size: 13px;
-    color: var(--text-main);
+    color: var(--text-main, #f8fafc);
 }
 
 .table-responsive th,
 .data-table th {
-    background-color: var(--bg-card);
-    color: var(--text-muted);
+    background-color: var(--bg-card, #0f172a);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
     font-size: 11px;
     letter-spacing: 0.5px;
@@ -35,9 +138,34 @@ table.data-table {
 
 .table-responsive tr:hover,
 .data-table tr:hover {
-    background-color: var(--table-hover);
+    background-color: var(--table-hover, rgba(255, 255, 255, 0.02));
 }
 
+/* Scrollbar Tabel */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: var(--bg-body);
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue, #38bdf8);
+}
+
+
+/* =================================================================
+   3. KOMPONEN UI (Avatar, Badge, Buttons)
+   =================================================================== */
 .avatar {
     width: 36px;
     height: 36px;
@@ -101,13 +229,13 @@ table.data-table {
 }
 
 .btn-delete:hover {
-    background-color: var(--error-color);
+    background-color: var(--error-color, #ef4444);
     color: white;
-    border-color: var(--error-color);
+    border-color: var(--error-color, #ef4444);
 }
 
 .btn-primary {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-blue, #38bdf8);
     color: white;
     padding: 9px 18px;
     border-radius: 8px;
@@ -121,58 +249,13 @@ table.data-table {
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--primary-hover, #0ea5e9);
 }
 
-.table-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
 
-.pagination-wrapper {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.pagination {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.pagination li a,
-.pagination li span {
-    background: var(--bg-card);
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 12px;
-    border: 1px solid var(--border-color);
-    display: block;
-    transition: all 0.2s ease;
-}
-
-.pagination li.active span {
-    background: var(--primary-blue);
-    color: white;
-    border-color: var(--primary-blue);
-}
-
-.pagination li.disabled span {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-/* --- FORM STYLING --- */
+/* =================================================================
+   4. FORM STYLING & FILE UPLOAD
+   =================================================================== */
 .crud-form {
     display: flex;
     flex-direction: column;
@@ -197,24 +280,26 @@ table.data-table {
 }
 
 .form-label {
-    color: var(--text-label);
+    color: var(--text-label, #cbd5e1);
     font-size: 13px;
     font-weight: 500;
 }
 
 .form-control, .filter-select, .search-input {
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-color);
+    background-color: var(--bg-input, #020617);
+    border: 1px solid var(--border-color, #1e293b);
     padding: 11px 16px;
     border-radius: 10px;
-    color: var(--text-main);
+    color: var(--text-main, #f8fafc);
     font-size: 13px;
     outline: none;
     transition: all 0.3s ease;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .form-control:focus, .filter-select:focus, .search-input:focus {
-    border-color: var(--primary-blue);
+    border-color: var(--primary-blue, #38bdf8);
     box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
 }
 
@@ -223,12 +308,12 @@ table.data-table {
 }
 
 .filter-select option {
-    background-color: var(--bg-card);
-    color: var(--text-main);
+    background-color: var(--bg-card, #0f172a);
+    color: var(--text-main, #f8fafc);
 }
 
 .search-input::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
 }
 
 .form-actions {
@@ -238,47 +323,20 @@ table.data-table {
     gap: 12px;
     margin-top: 15px;
     padding-top: 20px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color, #1e293b);
 }
 
 .alert-danger {
     background-color: rgba(239, 68, 68, 0.15);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: var(--error-color);
+    color: var(--error-color, #ef4444);
     padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 13px;
 }
 
-/* Styling Scrollbar / Slider Horizontal Tabel */
-.table-responsive::-webkit-scrollbar {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.table-responsive::-webkit-scrollbar-track {
-    background: var(--bg-body);
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 10px;
-    transition: background 0.2s ease;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-blue);
-}
-
-.table-responsive {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-color) var(--bg-body);
-    overflow-x: auto;
-}
-
-/* --- CUSTOM FILE UPLOAD DESIGN --- */
+/* Custom File Upload */
 .file-upload-wrapper {
     position: relative;
     width: 100%;
@@ -360,8 +418,10 @@ table.data-table {
     display: block;
 }
 
-/* --- FIX PAGINATION SUPAYA PAS DENGAN TEMA OSEDU --- */
-/* --- PERBAIKAN TOTAL PAGINATION SUPAYA RAPI --- */
+
+/* =================================================================
+   5. PAGINATION STYLING
+   =================================================================== */
 .pagination-wrapper {
     display: flex;
     gap: 10px;
@@ -369,9 +429,9 @@ table.data-table {
     align-items: center;
     margin-top: 20px;
     width: 100%;
+    flex-wrap: wrap;
 }
 
-/* Membungkus bagian teks informasi di kiri dan tombol di kanan */
 .pagination-wrapper nav {
     display: flex;
     justify-content: space-between;
@@ -381,7 +441,6 @@ table.data-table {
     gap: 10px;
 }
 
-/* Mengatur kotak list pagination */
 .pagination {
     display: flex;
     gap: 4px;
@@ -391,7 +450,6 @@ table.data-table {
     margin: 0;
 }
 
-/* Tombol angka & panah */
 .pagination li a,
 .pagination li span {
     background-color: var(--bg-card);
@@ -415,7 +473,6 @@ table.data-table {
     border-color: var(--primary-blue);
 }
 
-/* Halaman aktif */
 .pagination li.active span {
     background-color: var(--primary-blue);
     color: white;
@@ -423,7 +480,6 @@ table.data-table {
     font-weight: 600;
 }
 
-/* Tombol disabled */
 .pagination li.disabled span {
     background-color: var(--bg-body);
     opacity: 0.4;
@@ -431,14 +487,12 @@ table.data-table {
     color: var(--text-muted);
 }
 
-/* Ukuran ikon panah SVG agar pas di tengah tombol */
 .pagination svg {
     width: 14px !important;
     height: 14px !important;
     display: block;
 }
 
-/* Teks "Showing 1 to 10 of..." di sebelah kiri */
 .pagination-wrapper p, 
 .pagination-wrapper .text-sm {
     color: var(--text-muted);
