@@ -3,20 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Create Role - OSEDU Bright Future</title>
-
-    <!-- Font Inter -->
+    <title>Tambah Role - OSEDU Bright Future</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-
-    <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
 </head>
 <body class="dashboard-body">
 
     <!-- TOP NAVBAR -->
-    <header class="navbar-top">
+    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background-color: #0d121f; border-bottom: 1px solid #1a2235;">
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
         </a>
@@ -30,7 +25,6 @@
                 </svg>
             </button>
 
-            <!-- Dropdown Content -->
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,9 +32,7 @@
                     </svg>
                     <span>Profile</span>
                 </a>
-
                 <hr class="dropdown-divider">
-
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="dropdown-item logout-danger">
@@ -54,79 +46,72 @@
         </div>
     </header>
 
-    <!-- WRAPPER DASHBOARD -->
-    <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 80px);">
-        
+    <!-- WRAPPER -->
+    <div class="app-layout" style="margin-top: 72px; display: flex; width: 100%;">
+
         <!-- SIDEBAR -->
         @include('sidebar')
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="main-content">
+        <!-- MAIN CONTENT -->
+        <main class="main-content" style="margin-left: 260px; width: calc(100% - 260px); padding: 24px; box-sizing: border-box; flex: 1;">
             <div class="content-body" style="width: 100%;">
-                
-                <!-- Notifikasi Error Validasi -->
-                @if ($errors->any())
-                    <div class="alert alert-danger" style="padding: 12px 16px; background-color: #fee2e2; color: #991b1b; border-radius: 8px; margin-bottom: 20px;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <div class="dashboard-card" style="padding: 24px; width: 100% !important; max-width: 100% !important; box-sizing: border-box;">
 
-                <div class="dashboard-card">
-                    
-                    <!-- Header Section -->
-                    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div>
                             <h2 class="card-title" style="font-size: 1.25rem;">Tambah Role Baru</h2>
-                            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Tambahkan role atau jabatan baru ke dalam sistem.</p>
+                            <p class="card-desc" style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
+                                Isi formulir di bawah ini untuk menambahkan role baru.
+                            </p>
                         </div>
-                        <a href="{{ route('roles.index') }}" class="btn-secondary" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px; background: #334155; color: #fff; border-radius: 6px;">← Kembali</a>
                     </div>
 
-                    <!-- Form Create Role -->
-                    <form action="{{ route('roles.store') }}" method="POST">
+                    @if ($errors->any())
+                        <div class="alert alert-danger" style="background-color: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('roles.store') }}" method="POST" class="crud-form" style="width: 100%;">
                         @csrf
 
-                        <div style="margin-bottom: 20px;">
-                            <label for="name" style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 8px;">Nama Role</label>
-                            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Contoh: Editor, Staff, dll." required 
-                                style="width: 100%; padding: 10px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #f8fafc; font-size: 0.9rem;">
+                        <!-- NAME -->
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label for="name" class="form-label">Nama Role</label>
+                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" placeholder="Masukkan nama role..." required style="width: 100%; padding: 8px 12px;">
                         </div>
 
-                        <!-- Tombol Aksi -->
-                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px;">
-                            <a href="{{ route('roles.index') }}" style="text-decoration: none; padding: 10px 20px; background: #334155; color: #cbd5e1; border-radius: 6px; font-size: 0.9rem;">Batal</a>
-                            <button type="submit" class="btn-primary" style="padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer;">Simpan Role</button>
+                        <!-- ACTIONS -->
+                        <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                            <a href="{{ route('roles.index') }}" class="btn-action btn-delete" style="padding: 8px 18px; text-decoration: none; font-size: 0.85rem;">Batal</a>
+                            <button type="submit" class="btn-primary" style="padding: 8px 18px; font-size: 0.85rem;">Simpan Role</button>
                         </div>
                     </form>
 
                 </div>
             </div>
         </main>
-
     </div>
 
-    <!-- Script JavaScript Dropdown Profile -->
+    <!-- DROPDOWN SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const btn = document.getElementById('userMenuBtn');
-            const dropdown = document.getElementById('userMenuDropdown');
+        const btn = document.getElementById('userMenuBtn');
+        const dropdown = document.getElementById('userMenuDropdown');
 
-            if (btn && dropdown) {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('show');
-                });
+        if (btn && dropdown) {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
 
-                document.addEventListener('click', () => {
-                    dropdown.classList.remove('show');
-                });
-            }
-        });
+            document.addEventListener('click', () => {
+                dropdown.classList.remove('show');
+            });
+        }
     </script>
-
 </body>
 </html>

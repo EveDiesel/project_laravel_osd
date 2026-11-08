@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+Use App\Models\Activity;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -12,7 +13,8 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        $schedules = Schedule::with('activity')->paginate(10);
+        return view('schedule.index', compact('schedules'));
     }
 
     /**
@@ -20,7 +22,8 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        $activities = Activity::all();
+        return view('schedule.create', compact('activities'));
     }
 
     /**
@@ -28,7 +31,16 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'activity_id' => 'required|exists:activities,id',
+            'start_at' => 'required|date',
+            'end_at' => 'required|date|after:start_at',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        Schedule::create($request->all());
+
+        return redirect()->route('schedule.index')->with('success', 'Schedule created successfully.');
     }
 
     /**
@@ -44,7 +56,8 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        //
+        $activities = Activity::all();
+        return view('schedule.edit', compact('schedule', 'activities'));
     }
 
     /**
@@ -52,7 +65,16 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        //
+        $request->validate([
+            'activity_id' => 'required|exists:activities,id',
+            'start_at' => 'required|date',
+            'end_at' => 'required|date|after:start_at',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $schedule->update($request->all());
+
+        return redirect()->route('schedule.index')->with('success', 'Schedule updated successfully.');
     }
 
     /**
@@ -60,6 +82,8 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-        //
+        $schedule->delete();
+
+        return redirect()->route('schedule.index')->with('success', 'Schedule deleted successfully.');
     }
 }

@@ -55,6 +55,7 @@
                 </svg>
                 <span>Course Levels</span>
             </a>
+            @endrole
 
             <a href="{{ route('activity.index') }}" class="menu-item {{ request()->routeIs('activity.*') ? 'active' : '' }}">
                 <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,7 +70,6 @@
                 </svg>
                 <span>Schedule</span>
             </a>
-            @endrole
 
             <a href="{{ route('course-content.index') }}" class="menu-item {{ request()->routeIs('course-content.*') ? 'active' : '' }}">
                 <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

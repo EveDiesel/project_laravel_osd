@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -12,7 +13,8 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
+        $activities = Activity::with('course')->paginate(10);
+        return view('activity.index', compact('activities'));
     }
 
     /**
@@ -20,7 +22,8 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        //
+        $courses = Course::all(); 
+        return view('activity.create', compact('courses'));
     }
 
     /**
@@ -28,7 +31,16 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'name' => 'required|string|max:255',
+            'activity_type' => 'nullable|string',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        Activity::create($request->all());
+
+        return redirect()->route('activity.index')->with('success', 'Activity created successfully.');
     }
 
     /**
@@ -44,7 +56,8 @@ class ActivityController extends Controller
      */
     public function edit(Activity $activity)
     {
-        //
+        $courses = Course::all(); 
+        return view('activity.edit', compact('activity', 'courses'));
     }
 
     /**
@@ -52,7 +65,16 @@ class ActivityController extends Controller
      */
     public function update(Request $request, Activity $activity)
     {
-        //
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'name' => 'required|string|max:255',
+            'activity_type' => 'nullable|string',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $activity->update($request->all());
+
+        return redirect()->route('activity.index')->with('success', 'Activity updated successfully.');
     }
 
     /**
@@ -60,6 +82,8 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
-        //
+        $activity->delete();
+
+        return redirect()->route('activity.index')->with('success', 'Activity deleted successfully.');
     }
 }

@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Edit Role - OSEDU Bright Future</title>
 
     <!-- Font Inter -->
@@ -55,7 +54,7 @@
     </header>
 
     <!-- WRAPPER DASHBOARD -->
-    <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 80px);">
+    <div class="app-layout">
         
         <!-- SIDEBAR -->
         @include('sidebar')
@@ -63,64 +62,57 @@
         <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             <div class="content-body" style="width: 100%;">
-                
-                <!-- Notifikasi Error Validasi -->
-                @if ($errors->any())
-                    <div class="alert alert-danger" style="padding: 12px 16px; background-color: #fee2e2; color: #991b1b; border-radius: 8px; margin-bottom: 20px;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <div class="dashboard-card">
                     
-                    <!-- Header Section -->
-                    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <div>
-                            <h2 class="card-title" style="font-size: 1.25rem;">Edit Role: {{ $role->name }}</h2>
-                            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Ubah nama role dan kelola hak akses (permission) terkait.</p>
-                        </div>
-                        <a href="{{ route('roles.index') }}" class="btn-secondary" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px; background: #334155; color: #fff; border-radius: 6px;">← Kembali</a>
+                    <div class="header-section" style="margin-bottom: 20px;">
+                        <h2 class="card-title" style="font-size: 1.25rem;">Edit Role</h2>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Ubah data informasi role di bawah ini.</p>
                     </div>
 
-                    <!-- Form Edit Role -->
-                    <form action="{{ route('roles.update', $role->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <!-- Input Nama Role -->
-                        <div style="margin-bottom: 20px;">
-                            <label for="name" style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 8px;">Nama Role</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $role->name) }}" placeholder="Contoh: Editor, Staff, dll." required 
-                                style="width: 100%; padding: 10px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #f8fafc; font-size: 0.9rem;">
+                    <!-- Alert Validasi Error -->
+                    @if ($errors->any())
+                        <div style="background-color: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
+                    @endif
 
-                        <!-- Daftar Checkbox Permission -->
-                        <div style="margin-bottom: 25px;">
-                            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 10px;">Assign Permissions</label>
-                            
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; background: #1e293b; padding: 16px; border: 1px solid #334155; border-radius: 6px;">
-                                @forelse($permissions as $permission)
-                                    <label style="display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 0.85rem; cursor: pointer;">
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" 
-                                            {{ in_array($permission->name, $rolePermissions ?? []) ? 'checked' : '' }}
-                                            style="accent-color: #2563eb; width: 16px; height: 16px;">
-                                        {{ $permission->name }}
-                                    </label>
-                                @empty
-                                    <span style="color: #94a3b8; font-size: 0.85rem;">Belum ada permission yang dibuat.</span>
-                                @endforelse
+                        <!-- Form Edit Role -->
+                        <form action="{{ route('roles.update', $role->id) }}" method="POST" class="crud-form" style="width: 100%;">
+                            @csrf
+                            @method('PUT')
+
+                            <!-- Nama Role -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label for="name" class="form-label">Nama Role</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $role->name) }}" placeholder="Masukkan nama role..." required style="width: 100%; padding: 8px 12px;">
                             </div>
-                        </div>
+
+                            <!-- Daftar Permission (Checkbox List) -->
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label class="form-label" style="margin-bottom: 8px; display: block;">Daftar Permissions</label>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; background: #0d121f; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    @foreach($permissions as $permission)
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #cbd5e1; cursor: pointer;">
+                                            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" 
+                                                {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
+                                                style="accent-color: #2563eb; width: 16px; height: 16px;">
+                                            <span>{{ $permission->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
 
                         <!-- Tombol Aksi -->
-                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px;">
-                            <a href="{{ route('roles.index') }}" style="text-decoration: none; padding: 10px 20px; background: #334155; color: #cbd5e1; border-radius: 6px; font-size: 0.9rem;">Batal</a>
-                            <button type="submit" class="btn-primary" style="padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer;">Simpan Perubahan</button>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; border-top: 1px solid #1f2937; padding-top: 16px;">
+                            <a href="{{ route('roles.index') }}" class="btn-action btn-delete" style="padding: 8px 18px; text-decoration: none; font-size: 0.85rem;">Batal</a>
+                            <button type="submit" class="btn-primary" style="padding: 8px 18px; font-size: 0.85rem;">Perbarui Role</button>
                         </div>
+
                     </form>
 
                 </div>
@@ -129,9 +121,10 @@
 
     </div>
 
-    <!-- Script JavaScript Dropdown Profile -->
+    <!-- Script JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Dropdown Profile Navbar
             const btn = document.getElementById('userMenuBtn');
             const dropdown = document.getElementById('userMenuDropdown');
 

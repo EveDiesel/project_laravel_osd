@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
-            $table->id();
-            $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
-            $table->timestamp('start_at');
-            $table->timestamp('end_at');
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->timestamps();
-        });
+
+        if (!Schema::hasTable('schedules')) {
+                Schema::create('schedules', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('activity_id')->constrained('activities')->onDelete('cascade'); // Tambahkan ini
+                    $table->timestamp('start_at');
+                    $table->timestamp('end_at');
+                    $table->enum('status', ['active', 'inactive'])->default('active');
+                    $table->timestamps();
+                });
+        }
     }
 
     /**
