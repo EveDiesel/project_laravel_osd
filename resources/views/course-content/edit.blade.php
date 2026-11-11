@@ -13,37 +13,37 @@
 
     <style>
         #toolbar-container {
-            background: #172943;
-            border: 1px solid #243954;
+            background: var();
+            border: 1px solid var(--border-color);
             border-radius: 8px 8px 0 0;
         }
 
         #toolbar-container .ql-stroke {
-            stroke: #cbd5e1;
+            stroke: currentColor;
         }
 
         #toolbar-container .ql-fill {
-            fill: #cbd5e1;
+            fill: currentColor;
         }
 
         #toolbar-container .ql-picker {
-            color: #cbd5e1;
+            color: inherit;
         }
 
         #toolbar-container .ql-picker-options {
-            background: #132239;
-            border-color: #243954;
+            background: var();
+            border-color: var(--border-color);
         }
 
         #toolbar-container .ql-picker-item {
-            color: #e2e8f0;
+            color: inherit;
         }
 
         #editor {
             min-height: 220px;
-            background: #132239;
-            color: #e2e8f0;
-            border: 1px solid #243954;
+            background: var();
+            color: inherit;
+            border: 1px solid var(--border-color);
             border-radius: 0 0 8px 8px;
         }
 
@@ -60,6 +60,8 @@
 
         #editor .ql-editor a {
             color: #60a5fa;
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         #editor .ql-editor ol,
@@ -75,13 +77,29 @@
             max-width: 100%;
             height: auto;
             cursor: pointer;
+            display: block;
+            margin: 10px 0;
+        }
+
+        #editor .ql-editor img.ql-align-center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #editor .ql-editor img.ql-align-right {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        #editor .ql-editor img.ql-align-left {
+            margin-left: 0;
+            margin-right: auto;
         }
 
         #editor .ql-editor img.image-selected {
             outline: 2px solid #60a5fa;
         }
 
-        /* Titik untuk mengubah ukuran gambar */
         #imageResizeHandle {
             position: fixed;
             width: 14px;
@@ -97,6 +115,31 @@
             box-sizing: border-box;
         }
 
+        /* Styling Tombol Simbol Align Gambar di Toolbar */
+        .ql-image-align {
+            display: inline-flex;
+            gap: 2px;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+        .ql-image-align button {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: inherit;
+            width: 28px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ql-image-align button:hover {
+            background: #1e3a6d;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .edit-form-grid {
                 grid-template-columns: 1fr !important;
@@ -110,15 +153,14 @@
     </style>
 </head>
 
-<body class="dashboard-body" style="background: #0b1220; color: #e2e8f0;">
+<body class="dashboard-body">
 
     <!-- TOP NAVBAR -->
-    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background-color: #0d121f; border-bottom: 1px solid #1a2235;">
+    <header class="navbar-top">
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
         </a>
 
-        <!-- Profile & Logout Dropdown -->
         <div class="user-dropdown-wrapper">
             <button class="dropdown-trigger" id="userMenuBtn" type="button">
                 <span>{{ Auth::user()->name ?? Auth::user()->email }}</span>
@@ -130,7 +172,7 @@
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7-7h14a7 7 0 00-7 7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <span>Profile</span>
                 </a>
@@ -151,16 +193,15 @@
     </header>
 
     <!-- WRAPPER -->
-    <div class="app-layout" style="margin-top: 72px; display: flex; width: 100%; min-height: calc(100vh - 72px);">
+    <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 72px);">
 
         <!-- SIDEBAR -->
         @include('sidebar')
 
         <!-- MAIN CONTENT -->
-        <main class="main-content" style="margin-left: 260px; width: calc(100% - 260px); padding: 24px; box-sizing: border-box; flex: 1;">
+        <main class="main-content" style="flex: 1; padding: 24px;">
             <div class="content-body" style="width: 100%;">
 
-                <!-- ERROR ALERT -->
                 @if ($errors->any())
                     <div class="alert alert-danger" style="background: #3b1720; border: 1px solid #7f1d1d; color: #fecaca; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px;">
                         <ul style="margin: 0; padding-left: 20px;">
@@ -171,13 +212,12 @@
                     </div>
                 @endif
 
-                <!-- HEADER -->
                 <div style="margin-bottom: 24px;">
-                    <a href="{{ route('course-content.show', $course_content->id) }}" style="color: #93c5fd; text-decoration: none;">
+                    <a href="{{ route('course-content.show', $course_content->id) }}" style="color: #60a5fa; text-decoration: none;">
                         ← Kembali ke Detail
                     </a>
 
-                    <h1 style="color: white; font-size: 28px; font-weight: 700; margin-top: 20px;">
+                    <h1 style="font-size: 28px; font-weight: 700; margin-top: 20px;">
                         Edit Course Content
                     </h1>
 
@@ -186,23 +226,17 @@
                     </p>
                 </div>
 
-                <!-- FORM EDIT CONTENT -->
-                <div class="dashboard-card" style="padding: 28px; width: 100%; max-width: 100%; box-sizing: border-box; background: #0f1b30; border: 1px solid #1e3352; border-radius: 14px;">
+                <div class="dashboard-card" style="padding: 28px; width: 100%; max-width: 100%; box-sizing: border-box; border-radius: 14px; border: 1px solid var(--border-color);">
 
                     <form id="editContentForm" action="{{ route('course-content.update', $course_content->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        <!-- COURSE & COURSE LEVEL -->
                         <div class="edit-form-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
-
-                            <!-- COURSE -->
                             <div class="form-group" style="margin-bottom: 16px;">
-                                <label for="course_id" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Course</label>
-
-                                <select name="course_id" id="course_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <label for="course_id" class="form-label" style="display: block; margin-bottom: 8px;">Course</label>
+                                <select name="course_id" id="course_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled>Pilih Course...</option>
-
                                     @foreach($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id', $course_content->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->title ?? $course->name ?? 'Course #' . $course->id }}
@@ -211,13 +245,10 @@
                                 </select>
                             </div>
 
-                            <!-- COURSE LEVEL -->
                             <div class="form-group" style="margin-bottom: 16px;">
-                                <label for="course_level_id" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Course Level</label>
-
-                                <select name="course_level_id" id="course_level_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <label for="course_level_id" class="form-label" style="display: block; margin-bottom: 8px;">Course Level</label>
+                                <select name="course_level_id" id="course_level_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled>Pilih Course Level...</option>
-
                                     @foreach($levels as $level)
                                         <option value="{{ $level->id }}" {{ old('course_level_id', $course_content->course_level_id) == $level->id ? 'selected' : '' }}>
                                             {{ $level->name ?? $level->title ?? 'Level #' . $level->id }}
@@ -227,21 +258,15 @@
                             </div>
                         </div>
 
-                        <!-- TITLE -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <label for="title" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Judul Content</label>
-
-                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $course_content->title) }}" placeholder="Masukkan judul content..." required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                            <label for="title" class="form-label" style="display: block; margin-bottom: 8px;">Judul Content</label>
+                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $course_content->title) }}" placeholder="Masukkan judul content..." required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color);">
                         </div>
 
-                        <!-- CONTENT TYPE & SESSION -->
                         <div class="edit-form-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
-
-                            <!-- CONTENT TYPE -->
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="content_type" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Content Type</label>
-
-                                <select name="content_type" id="content_type" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <label for="content_type" class="form-label" style="display: block; margin-bottom: 8px;">Content Type</label>
+                                <select name="content_type" id="content_type" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled>Pilih Content Type...</option>
                                     <option value="video" {{ old('content_type', $course_content->content_type) == 'video' ? 'selected' : '' }}>Video</option>
                                     <option value="pdf" {{ old('content_type', $course_content->content_type) == 'pdf' ? 'selected' : '' }}>PDF</option>
@@ -251,17 +276,14 @@
                                 </select>
                             </div>
 
-                            <!-- SESSION -->
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="session" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Session</label>
-
-                                <input type="number" name="session" id="session" class="form-control" value="{{ old('session', $course_content->session) }}" placeholder="Masukkan nomor session..." min="1" required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <label for="session" class="form-label" style="display: block; margin-bottom: 8px;">Session</label>
+                                <input type="number" name="session" id="session" class="form-control" value="{{ old('session', $course_content->session) }}" placeholder="Masukkan nomor session..." min="1" required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color);">
                             </div>
                         </div>
 
-                        <!-- CONTENT RICH TEXT EDITOR -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <label for="editor" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">Content</label>
+                            <label for="editor" class="form-label" style="display: block; margin-bottom: 8px;">Content</label>
 
                             <!-- EDITOR TOOLBAR -->
                             <div id="toolbar-container">
@@ -311,6 +333,16 @@
                                     <button type="button" class="ql-blockquote"></button>
                                     <button type="button" class="ql-code-block"></button>
                                     <button type="button" class="ql-link"></button>
+                                    <button type="button" class="ql-image"></button>
+                                </span>
+
+                                <!-- Tombol Simbol Perataan Gambar -->
+                                <span class="ql-formats">
+                                    <span class="ql-image-align" title="Atur Posisi Gambar">
+                                        <button type="button" id="imgAlignLeft" title="Rata Kiri">⇠</button>
+                                        <button type="button" id="imgAlignCenter" title="Rata Tengah">≡</button>
+                                        <button type="button" id="imgAlignRight" title="Rata Kanan">⇢</button>
+                                    </span>
                                 </span>
 
                                 <span class="ql-formats">
@@ -318,19 +350,9 @@
                                     <button type="button" id="undoEditor" title="Undo">↶</button>
                                     <button type="button" id="redoEditor" title="Redo">↷</button>
                                 </span>
-
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-blockquote"></button>
-                                    <button type="button" class="ql-code-block"></button>
-                                    <button type="button" class="ql-link"></button>
-                                    <button type="button" class="ql-image"></button>
-                                </span>
                             </div>
 
-                            <!-- EDITOR AREA -->
                             <div id="editor"></div>
-
-                            <!-- HIDDEN INPUT -->
                             <input type="hidden" name="content" id="content">
 
                             @error('content')
@@ -338,14 +360,11 @@
                             @enderror
                         </div>
 
-                        <!-- ACTIONS -->
-                        <div class="form-actions" style="display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; border-top: 1px solid #243954; padding-top: 20px; margin-top: 24px;">
-
-                            <a href="{{ route('course-content.show', $course_content->id) }}" style="background: #1e3a6d; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+                        <div class="form-actions" style="display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 24px;">
+                            <a href="{{ route('course-content.show', $course_content->id) }}" class="btn-action" style="background: #334155; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
                                 Batal
                             </a>
-
-                            <button type="submit" class="btn-primary" style="background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                            <button type="submit" class="btn-primary" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
                                 Simpan Perubahan
                             </button>
                         </div>
@@ -355,11 +374,9 @@
         </main>
     </div>
 
-    <!-- SCRIPT QUILL EDITOR -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <script>
-        // Fungsi upload gambar
         function imageHandler() {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
@@ -369,19 +386,15 @@
 
             input.onchange = () => {
                 const files = input.files;
-
                 if (files) {
                     Array.from(files).forEach(file => {
                         const reader = new FileReader();
-
                         reader.onload = (e) => {
                             const range = quill.getSelection(true);
                             const index = range ? range.index : quill.getLength();
-
                             quill.insertEmbed(index, 'image', e.target.result, 'user');
                             quill.setSelection(index + 1, 0, 'user');
                         };
-
                         reader.readAsDataURL(file);
                     });
                 }
@@ -406,14 +419,21 @@
             }
         });
 
-        // Muat content lama ke editor
         const existingContent = {!! json_encode(old('content', $course_content->content ?? '')) !!};
-
         if (existingContent) {
             quill.root.innerHTML = existingContent;
         }
 
-        // Tombol undo dan redo
+        quill.root.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                const url = e.target.getAttribute('href');
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            }
+        });
+
         document.getElementById('undoEditor').addEventListener('click', function () {
             quill.history.undo();
         });
@@ -422,15 +442,12 @@
             quill.history.redo();
         });
 
-        // Simpan HTML editor ke input hidden
         document.getElementById('editContentForm').addEventListener('submit', function () {
             document.getElementById('content').value = quill.root.innerHTML;
         });
 
-        // FITUR RESIZE GAMBAR
         document.addEventListener('DOMContentLoaded', function () {
             const editor = document.querySelector('#editor .ql-editor');
-
             if (!editor) return;
 
             const handle = document.createElement('div');
@@ -447,73 +464,82 @@
                     handle.style.display = 'none';
                     return;
                 }
-
                 const rect = selectedImage.getBoundingClientRect();
-
                 handle.style.left = (rect.right - 7) + 'px';
                 handle.style.top = (rect.bottom - 7) + 'px';
                 handle.style.display = 'block';
             }
 
             function selectImage(img) {
+                if (selectedImage) {
+                    selectedImage.classList.remove('image-selected');
+                }
                 selectedImage = img;
+                selectedImage.classList.add('image-selected');
                 positionHandle();
             }
 
             editor.addEventListener('click', function (event) {
                 if (isResizing) return;
-
                 if (event.target.tagName === 'IMG') {
                     selectImage(event.target);
                 } else {
+                    if (selectedImage) {
+                        selectedImage.classList.remove('image-selected');
+                    }
                     selectedImage = null;
                     handle.style.display = 'none';
                 }
             });
 
+            document.getElementById('imgAlignLeft').addEventListener('click', function() {
+                if (!selectedImage) return;
+                selectedImage.classList.remove('ql-align-center', 'ql-align-right');
+                selectedImage.classList.add('ql-align-left');
+                positionHandle();
+            });
+
+            document.getElementById('imgAlignCenter').addEventListener('click', function() {
+                if (!selectedImage) return;
+                selectedImage.classList.remove('ql-align-left', 'ql-align-right');
+                selectedImage.classList.add('ql-align-center');
+                positionHandle();
+            });
+
+            document.getElementById('imgAlignRight').addEventListener('click', function() {
+                if (!selectedImage) return;
+                selectedImage.classList.remove('ql-align-left', 'ql-align-center');
+                selectedImage.classList.add('ql-align-right');
+                positionHandle();
+            });
+
             handle.addEventListener('pointerdown', function (event) {
                 if (!selectedImage) return;
-
                 event.preventDefault();
                 event.stopPropagation();
-
                 isResizing = true;
                 startX = event.clientX;
                 startWidth = selectedImage.getBoundingClientRect().width;
-
                 handle.setPointerCapture(event.pointerId);
             });
 
             handle.addEventListener('pointermove', function (event) {
                 if (!isResizing || !selectedImage) return;
-
                 const editorWidth = editor.clientWidth;
                 const deltaX = event.clientX - startX;
-
-                const newWidth = Math.max(
-                    40,
-                    Math.min(startWidth + deltaX, editorWidth)
-                );
-
+                const newWidth = Math.max(40, Math.min(startWidth + deltaX, editorWidth));
                 selectedImage.style.width = newWidth + 'px';
                 selectedImage.style.height = 'auto';
                 selectedImage.style.maxWidth = '100%';
-
                 positionHandle();
             });
 
             function stopResizing() {
                 if (!isResizing) return;
-
                 isResizing = false;
-
                 if (selectedImage) {
-                    selectedImage.setAttribute(
-                        'width',
-                        Math.round(selectedImage.getBoundingClientRect().width)
-                    );
+                    selectedImage.setAttribute('width', Math.round(selectedImage.getBoundingClientRect().width));
                 }
-
                 positionHandle();
                 quill.update('user');
             }
@@ -527,7 +553,6 @@
         });
     </script>
 
-    <!-- SCRIPT DROPDOWN -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('userMenuBtn');

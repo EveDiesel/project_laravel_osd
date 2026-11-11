@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Manage Course Content- OSEDU Bright Future</title>
+    <title>Manage Course Content - OSEDU Bright Future</title>
 
     <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,6 +17,40 @@
 
     <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
+
+    <!-- Tambahan Styling Inline Khusus Pill Card Content agar Super Rapi -->
+    <style>
+        .content-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px 10px;
+            border-radius: 50px; /* Bentuk pill melengkung */
+            max-width: 300px;
+        }
+        .content-pill-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #334155;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .content-pill-text {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 
@@ -63,7 +97,7 @@
     <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 80px);">
         
         <!-- SIDEBAR -->
-            @include('sidebar')
+        @include('sidebar')
 
         <!-- MAIN CONTENT AREA -->
         <main class="main-content">
@@ -100,16 +134,14 @@
 
                     <!-- Table Data -->
                     <div class="table-responsive">
-                        <table style="width: 100%; border-collapse: collapse;">
+                        <table style="width: 100%; border-collapse: collapse; vertical-align: middle;">
                             <thead>
                                 <tr>
                                     @if($stu)
-                                        <!-- Kolom khusus Student: Hanya Title dan Content -->
                                         <th>TITLE</th>
                                         <th>CONTENT</th>
-                                        <th>DETAIL</th>
+                                        <th>DETAILS</th>
                                     @else
-                                        <!-- Kolom untuk Admin & Tutor (Tampilan Normal) -->
                                         <th>NO</th>
                                         <th>COURSE</th>
                                         <th>LEVEL</th>
@@ -117,20 +149,20 @@
                                         @if(!$tut)<th>CONTENT TYPE</th>@endif
                                         <th>SESSION</th>
                                         <th>CONTENT</th>
-                                        @if(!$tut)<th>ACTIONS</th>@endif
-                                        <th>DETAIL</th>
+                                        @if(!$tut)<th>DETAILS</th>@endif
                                     @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($contents as $index => $cont)
-                                <tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                                     @if($stu)
                                         <!-- Isi Baris khusus Student -->
                                         <td><strong>{{ $cont->title }}</strong></td>
                                         <td>
-                                            <div class="content-preview">
-                                                {{ Str::limit(strip_tags($cont->content), 80, '...') }}
+                                            <div class="content-pill">
+                                                <div class="content-pill-thumb">📄</div>
+                                                <div class="content-pill-text">{{ Str::limit(strip_tags($cont->content), 40) }}</div>
                                             </div>
                                         </td>
                                         <td> 
@@ -149,21 +181,25 @@
                                         
                                         <td>{{ $cont->session }}</td>
                                         <td>
-                                            <div class="content-display">
-                                                {!! $cont->content ?? '' !!}
+                                            <!-- Pill Card Compact untuk menghindari gambar melar -->
+                                            <div class="content-pill">
+                                                @php
+                                                    // Ambil gambar pertama dari konten HTML jika ada, atau tampilkan icon default
+                                                    preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $cont->content, $matches);
+                                                    $firstImg = $matches[1] ?? null;
+                                                @endphp
+
+                                                @if($firstImg)
+                                                    <img src="{{ $firstImg }}" alt="Thumb" class="content-pill-thumb">
+                                                @else
+                                                    <div class="content-pill-thumb">-</div>
+                                                @endif
+
+                                                <div class="content-pill-text">
+                                                    {{ Str::limit(strip_tags($cont->content), 35) }}
+                                                </div>
                                             </div>
                                         </td>
-
-                                        @role('Admin')
-                                        <td>
-                                            <form action="{{ route('course-content.destroy', $cont->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn-action btn-delete" style="border:none; cursor:pointer;" onclick="return confirm('Yakin ingin menghapus Content ini?')">Delete</button>
-                                            </form>
-                                        </td>
-                                        @endrole
-
                                         <td> 
                                             <a href="{{ route('course-content.show', $cont->id) }}" class="btn-action btn-edit" style="text-decoration: none">Lihat</a>
                                         </td>

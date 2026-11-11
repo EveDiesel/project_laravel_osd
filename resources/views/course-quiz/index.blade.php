@@ -50,7 +50,7 @@
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7-7h14a7 7 0 00-7 7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <span>Profile</span>
                 </a>
@@ -120,7 +120,7 @@
                                     <td>{{ $courseQuiz->name ?? '-' }}</td>
                                     <td>
                                         {{-- Menghitung jumlah soal dari kolom JSON --}}
-                                        <span class="badge" style="background: #1e293b; color: #34d399; border: 1px solid #334155; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500;">
+                                        <span class="badge" style="color: #6281ff; border: 1px solid #334155; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500;">
                                             {{ is_array($courseQuiz->questions) ? count($courseQuiz->questions) : 0 }} Soal
                                         </span>
                                     </td>

@@ -95,9 +95,9 @@
                             <div class="form-group" style="margin-bottom: 20px;">
                                 <label class="form-label" style="margin-bottom: 8px; display: block;">Daftar Permissions</label>
                                 
-                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; background: #0d121f; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     @foreach($permissions as $permission)
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #cbd5e1; cursor: pointer;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
                                             <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" 
                                                 {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
                                                 style="accent-color: #2563eb; width: 16px; height: 16px;">

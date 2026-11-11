@@ -16,7 +16,7 @@
 <body class="dashboard-body">
 
     <!-- TOP NAVBAR -->
-    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background-color: #0d121f; border-bottom: 1px solid #1a2235;">
+    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
 
         <!-- Brand Logo -->
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">

@@ -8,7 +8,7 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
 </head>
-<body class="dashboard-body" style="background-color: #070a13;">
+<body class="dashboard-body">
 
     <!-- TOP NAVBAR -->
     <header class="navbar-top">
@@ -49,75 +49,75 @@
             <div class="content-body" style="width: 100%;">
                 
                 @if(session('success'))
-                    <div class="alert alert-success" style="padding: 12px 16px; background-color: #065f46; color: #d1fae5; border-radius: 8px; margin-bottom: 20px;">
+                    <div class="alert alert-success" style="padding: 12px 16px; border-radius: 8px; margin-bottom: 20px;">
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <!-- CARD UTAMA (Diberi background gelap agar menyatu) -->
-                <div class="dashboard-card" style="width: 100%; background: #0d121f !important; border: 1px solid #1a2235 !important; color: #ffffff !important; box-shadow: none !important;">
+                <!-- CARD UTAMA (Mengikuti tema sistem secara otomatis) -->
+                <div class="dashboard-card" style="width: 100%;">
                     
                     <!-- HEADER SECTION -->
                     <div style="margin-bottom: 20px;">
-                        <h2 class="card-title" style="font-size: 1.25rem; color: #ffffff !important;">Quiz: {{ $courseQuiz->name }}</h2>
+                        <h2 class="card-title" style="font-size: 1.25rem;">Quiz: {{ $courseQuiz->name }}</h2>
                         <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
                             Materi: {{ $courseQuiz->courseContent->title ?? '-' }}
                         </p>
                     </div>
 
-                    <hr style="border: 0; border-top: 1px solid #1a2235; margin-bottom: 24px;">
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 24px;">
 
                     {{-- =================================================== --}}
                     {{-- TAMPILAN UNTUK TUTOR / ADMIN (KELOLA & TAMBAH SOAL) --}}
                     {{-- =================================================== --}}
                     @hasanyrole('Admin|Tutor')
-                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #ffffff;">+ Tambah Pertanyaan Baru</h3>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px;">+ Tambah Pertanyaan Baru</h3>
                         
-                        <form action="{{ route('course-quiz.questions.store', $courseQuiz->id) }}" method="POST" style="background: #131b2e; border: 1px solid #1f2d45; padding: 24px; border-radius: 10px; margin-bottom: 30px;">
+                        <form action="{{ route('course-quiz.questions.store', $courseQuiz->id) }}" method="POST" style="padding: 24px; border-radius: 10px; margin-bottom: 30px; border: 1px solid var(--border-color);">
                             @csrf
                             <div class="form-group" style="margin-bottom: 16px;">
-                                <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Pertanyaan</label>
-                                <textarea name="question" class="form-control" rows="3" required style="width: 100%; padding: 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;"></textarea>
+                                <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Pertanyaan</label>
+                                <textarea name="question" class="form-control" rows="3" required style="width: 100%; padding: 12px; border-radius: 8px;"></textarea>
                             </div>
 
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div>
-                                    <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Pilihan A</label>
-                                    <input type="text" name="option_a" class="form-control" required style="width: 100%; padding: 10px 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;">
+                                    <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Pilihan A</label>
+                                    <input type="text" name="option_a" class="form-control" required style="width: 100%; padding: 10px 12px; border-radius: 8px;">
                                 </div>
                                 <div>
-                                    <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Pilihan B</label>
-                                    <input type="text" name="option_b" class="form-control" required style="width: 100%; padding: 10px 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;">
+                                    <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Pilihan B</label>
+                                    <input type="text" name="option_b" class="form-control" required style="width: 100%; padding: 10px 12px; border-radius: 8px;">
                                 </div>
                                 <div>
-                                    <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Pilihan C</label>
-                                    <input type="text" name="option_c" class="form-control" required style="width: 100%; padding: 10px 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;">
+                                    <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Pilihan C</label>
+                                    <input type="text" name="option_c" class="form-control" required style="width: 100%; padding: 10px 12px; border-radius: 8px;">
                                 </div>
                                 <div>
-                                    <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Pilihan D</label>
-                                    <input type="text" name="option_d" class="form-control" required style="width: 100%; padding: 10px 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;">
+                                    <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Pilihan D</label>
+                                    <input type="text" name="option_d" class="form-control" required style="width: 100%; padding: 10px 12px; border-radius: 8px;">
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label class="form-label" style="color: #cbd5e1; font-weight: 500; margin-bottom: 6px; display: block;">Kunci Jawaban Benar</label>
-                                <select name="correct_answer" class="form-control" required style="width: 200px; padding: 10px 12px; background: #070a13; border: 1px solid #2a3649; color: #ffffff; border-radius: 8px;">
-                                    <option value="A" style="background: #070a13; color: #fff;">A</option>
-                                    <option value="B" style="background: #070a13; color: #fff;">B</option>
-                                    <option value="C" style="background: #070a13; color: #fff;">C</option>
-                                    <option value="D" style="background: #070a13; color: #fff;">D</option>
+                                <label class="form-label" style="font-weight: 500; margin-bottom: 6px; display: block;">Kunci Jawaban Benar</label>
+                                <select name="correct_answer" class="form-control" required style="width: 200px; padding: 10px 12px; border-radius: 8px;">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
                                 </select>
                             </div>
 
                             <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">Simpan Soal</button>
                         </form>
 
-                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #ffffff;">Daftar Soal Saat Ini</h3>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Daftar Soal Saat Ini</h3>
                         <div style="display: flex; flex-direction: column; gap: 15px;">
                             @forelse($courseQuiz->questions ?? [] as $index => $q)
-                                <div style="background: #131b2e; border: 1px solid #1f2d45; padding: 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start;">
                                     <div>
-                                        <p style="font-weight: 600; margin-bottom: 8px; color: #fff;">{{ $index + 1 }}. {{ $q['question'] }}</p>
+                                        <p style="font-weight: 600; margin-bottom: 8px;">{{ $index + 1 }}. {{ $q['question'] }}</p>
                                         <ul style="list-style: none; padding: 0; font-size: 0.9rem; color: #94a3b8; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
                                             <li>A. {{ $q['option_a'] }}</li>
                                             <li>B. {{ $q['option_b'] }}</li>
@@ -152,10 +152,10 @@
                                 @csrf
                                 <div style="display: flex; flex-direction: column; gap: 20px;">
                                     @foreach($courseQuiz->questions as $index => $q)
-                                        <div style="background: #131b2e; border: 1px solid #1f2d45; padding: 16px; border-radius: 8px;">
-                                            <p style="font-weight: 600; margin-bottom: 12px; color: #fff;">{{ $index + 1 }}. {{ $q['question'] }}</p>
+                                        <div style="padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                            <p style="font-weight: 600; margin-bottom: 12px;">{{ $index + 1 }}. {{ $q['question'] }}</p>
                                             
-                                            <div style="display: flex; flex-direction: column; gap: 8px; color: #cbd5e1;">
+                                            <div style="display: flex; flex-direction: column; gap: 8px;">
                                                 <label style="cursor: pointer;"><input type="radio" name="answers[{{ $q['id'] }}]" value="A" required> A. {{ $q['option_a'] }}</label>
                                                 <label style="cursor: pointer;"><input type="radio" name="answers[{{ $q['id'] }}]" value="B"> B. {{ $q['option_b'] }}</label>
                                                 <label style="cursor: pointer;"><input type="radio" name="answers[{{ $q['id'] }}]" value="C"> C. {{ $q['option_c'] }}</label>

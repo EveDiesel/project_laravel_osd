@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>{{ $contents->title }} - OSEDU Bright Future</title>
 
     <!-- Font Inter -->
@@ -15,6 +14,43 @@
 
     <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
+   
+    <style>
+        .content-display img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px 0;
+        }
+        
+        .content-display img.ql-align-center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .content-display img.ql-align-right {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .content-display img.ql-align-left {
+            margin-left: 0;
+            margin-right: auto;
+        }
+      
+        .content-display .ql-align-center {
+            text-align: center;
+        }
+        .content-display .ql-align-right {
+            text-align: right;
+        }
+        .content-display .ql-align-justify {
+            text-align: justify;
+        }
+      
+        .content-display a {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 
@@ -22,7 +58,7 @@
         $stu = auth()->user()->hasRole('Student');
     @endphp
 
-    <!-- TOP NAVBAR -->
+    <!-- TOP NAVBAR (Tanpa Background Hardcode) -->
     <header class="navbar-top">
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
@@ -72,32 +108,33 @@
             <div class="content-body" style="width: 100%;">
 
                 @if(session('success'))
-                    <div class="alert alert-success" style="padding: 12px 16px; background-color: #d1fae5; color: #065f46; border-radius: 8px; margin-bottom: 20px;">
+                    <div class="alert alert-success" style="padding: 12px 16px; border-radius: 8px; margin-bottom: 20px;">
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <div class="dashboard-card" style="padding: 28px; margin-top: 4px; background: #0f1b30; border: 1px solid #1e3352; border-radius: 14px;">
+                <!-- CARD UTAMA (Menggunakan dashboard-card standar mengikuti sistem tema) -->
+                <div class="dashboard-card" style="padding: 28px; margin-top: 4px; border-radius: 14px; border: 1px solid var(--border-color);">
 
                     <!-- KEMBALI & NAVIGASI -->
                     @hasanyrole('Admin|Tutor')
                         <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-                            <a href="{{ route('course-content.index') }}" style="display: inline-block; background: #1e3a6d; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px;">
+                            <a href="{{ route('course-content.index') }}" class="btn-action" style="display: inline-block; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px;">
                                 ← Kembali ke Daftar
                             </a>
                         </div>
                     @endhasanyrole
 
                     @if($stu)
-                    <!-- experiment -->
-                        <div style="max-width: 800px; margin: 0 auto; background: #132239; border: 1px solid #243954; border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                    <!-- Tampilan untuk Student (Bergaya Buku / Modul) -->
+                        <div style="max-width: 800px; margin: 0 auto; border: 1px solid var(--border-color); border-radius: 16px; padding: 40px;">
                             
                             <!-- Header Buku / Modul -->
-                            <div style="text-align: center; border-bottom: 1px solid #243954; padding-bottom: 24px; margin-bottom: 30px;">
-                                <span style="display: inline-block; background: #1e3a6d; color: #93c5fd; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 12px;">
-                                    {{ $contents->course->title ?? 'Materi Belajar' }} • Level: {{ $contents->courseLevel->name ?? '-' }}
+                            <div style="text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; margin-bottom: 30px;">
+                                <span style="display: inline-block; background: var(--primary-color, #2563eb); color: white; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 12px;">
+                                    {{ $contents->course->title ?? 'Materi Belajar' }} | Level: {{ $contents->courseLevel->name ?? '-' }}
                                 </span>
-                                <h1 style="color: white; font-size: 32px; font-weight: 800; line-height: 1.3;">
+                                <h1 style="font-size: 32px; font-weight: 800; line-height: 1.3;">
                                     {{ $contents->title }}
                                 </h1>
                                 <p style="color: #94a3b8; font-size: 14px; margin-top: 8px;">
@@ -105,8 +142,8 @@
                                 </p>
                             </div>
 
-                            <!-- Isi Konten Bergaya Buku (Lebih Luas, Nyaman Dibaca) -->
-                            <div style="color: #e2e8f0; font-size: 16px; line-height: 1.9; word-break: break-word;">
+                            <!-- Isi Konten Bergaya Buku -->
+                            <div style="font-size: 16px; line-height: 1.9; word-break: break-word;">
                                 @if ($contents->content)
                                     <div class="content-display">
                                         {!! $contents->content !!}
@@ -117,7 +154,7 @@
                             </div>
 
                             <!-- Footer Navigasi / Selesai Membaca -->
-                            <div style="border-top: 1px solid #243954; margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="border-top: 1px solid var(--border-color); margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
                                 <a href="{{ route('course-content.index') }}" style="color: #94a3b8; text-decoration: none; font-size: 14px;">
                                     ← Kembali
                                 </a>
@@ -127,9 +164,9 @@
                         </div>
 
                     @else
-                        
+                        <!-- Tampilan untuk Admin / Tutor -->
                         <div style="margin-bottom: 24px;">
-                            <h1 style="color: white; font-size: 28px; font-weight: 700; margin-top: 20px;">
+                            <h1 style="font-size: 28px; font-weight: 700; margin-top: 20px;">
                                 Detail Course Content
                             </h1>
                             <p style="color: #94a3b8; margin-top: 8px;">
@@ -138,9 +175,9 @@
                         </div>
 
                         <!-- KOTAK INFORMASI -->
-                        <div style="background: #132239; border: 1px solid #243954; border-radius: 12px; margin-top: 24px; overflow: hidden;">
+                        <div style="border: 1px solid var(--border-color); border-radius: 12px; margin-top: 24px; overflow: hidden;">
                             <div style="padding: 24px;">
-                                <h2 style="color: white; font-size: 24px; font-weight: 700;">
+                                <h2 style="font-size: 24px; font-weight: 700;">
                                     {{ $contents->title }}
                                 </h2>
                                 <span style="display: inline-block; background: #3730a3; color: white; padding: 6px 14px; border-radius: 20px; margin-top: 12px;">
@@ -148,30 +185,30 @@
                                 </span>
                             </div>
 
-                            <hr style="border-color: #243954;">
+                            <hr style="border-color: var(--border-color);">
 
                             <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding: 24px;">
                                 <div>
                                     <p style="color: #7da5d8;">Course</p>
-                                    <p style="color: white; margin-top: 8px; font-weight: 500;">
+                                    <p style="margin-top: 8px; font-weight: 500;">
                                         {{ $contents->course->title ?? '-' }}
                                     </p>
                                 </div>
-                                <div style="border-left: 1px solid #243954; padding-left: 20px;">
+                                <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
                                     <p style="color: #7da5d8;">Course Level</p>
-                                    <p style="color: white; margin-top: 8px; font-weight: 500;">
+                                    <p style="margin-top: 8px; font-weight: 500;">
                                         {{ $contents->courseLevel->name ?? '-' }}
                                     </p>
                                 </div>
-                                <div style="border-left: 1px solid #243954; padding-left: 20px;">
+                                <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
                                     <p style="color: #7da5d8;">Session</p>
-                                    <p style="color: white; margin-top: 8px; font-weight: 500;">
+                                    <p style="margin-top: 8px; font-weight: 500;">
                                         {{ $contents->session ?? '-' }}
                                     </p>
                                 </div>
-                                <div style="border-left: 1px solid #243954; padding-left: 20px;">
+                                <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
                                     <p style="color: #7da5d8;">Content Type</p>
-                                    <p style="color: white; margin-top: 8px; font-weight: 500;">
+                                    <p style="margin-top: 8px; font-weight: 500;">
                                         {{ $contents->content_type }}
                                     </p>
                                 </div>
@@ -179,11 +216,11 @@
                         </div>
 
                         <!-- KOTAK ISI CONTENT -->
-                        <div style="background: #132239; border: 1px solid #243954; border-radius: 12px; padding: 24px; margin-top: 24px;">
-                            <h3 style="color: white; font-size: 22px; font-weight: 700; margin-bottom: 16px;">
+                        <div style="border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 24px;">
+                            <h3 style="font-size: 22px; font-weight: 700; margin-bottom: 16px;">
                                 Isi Content
                             </h3>
-                            <div style="background: #0f1b30; border: 1px solid #243954; border-radius: 10px; padding: 16px; color: #dbeafe; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 80px; line-height: 1.7;">
+                            <div class="content-display" style="border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; overflow-wrap: anywhere; min-height: 80px; line-height: 1.7;">
                                 @if ($contents->content)
                                     {!! $contents->content !!}
                                 @endif
@@ -200,7 +237,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="background: #dc2626; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">
-                                    🗑 Delete
+                                    Delete
                                 </button>
                             </form>
                         </div>

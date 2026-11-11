@@ -144,14 +144,14 @@
                             <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
                                 <input type="hidden" name="is_active" value="0">
                                 <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $course->is_active) ? 'checked' : '' }} style="width: 16px; height: 16px;">
-                                <label for="is_active" style="font-size: 13px; color: #cbd5e1; font-weight: 500; cursor: pointer;">Is Active</label>
+                                <label for="is_active" style="font-size: 13px; font-weight: 500; cursor: pointer;">Is Active</label>
                             </div>
 
                             <!-- Is Displayed -->
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <input type="hidden" name="is_displayed" value="0">
                                 <input type="checkbox" name="is_displayed" id="is_displayed" value="1" {{ old('is_displayed', $course->is_displayed) ? 'checked' : '' }} style="width: 16px; height: 16px;">
-                                <label for="is_displayed" style="font-size: 13px; color: #cbd5e1; font-weight: 500; cursor: pointer;">Is Displayed</label>
+                                <label for="is_displayed" style="font-size: 13px;  font-weight: 500; cursor: pointer;">Is Displayed</label>
                             </div>
 
                             <!-- Tombol Aksi -->

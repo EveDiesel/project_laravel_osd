@@ -103,34 +103,34 @@
                         </div>
         
         <!-- Nama Course Level -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 13px; color: #94a3b8; font-weight: 500px;">Nama Course Level <span style="color: #ef4444;">*</span></label>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+            <label style="font-size: 13px; font-weight: 500px;">Nama Course Level <span style="color: #ef4444;">*</span></label>
             <input type="text" name="name" class="search-input" placeholder="Masukkan nama level..." style="width: 100%; padding: 8px 12px; box-sizing: border-box;" value="{{ old('name', $course_level->name) }}" required>
         </div>
 
         <!-- Level & Meeting Count -->
-        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 16px;">
             <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 6px;">
-                <label style="font-size: 13px; color: #94a3b8; font-weight: 500px;">Level <span style="color: #ef4444;">*</span></label>
+                <label style="font-size: 13px; font-weight: 500px;">Level <span style="color: #ef4444;">*</span></label>
                 <input type="number" name="level" class="search-input" placeholder="Contoh: 1" min="1" style="width: 100%; padding: 8px 12px; box-sizing: border-box;" value="{{ old('level', $course_level->level) }}" required>
             </div>
         </div>
 
         <!-- Meeting Minutes -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 13px; color: #94a3b8; font-weight: 500px;">Durasi Pertemuan (Menit) <span style="color: #ef4444;">*</span></label>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+            <label style="font-size: 13px; font-weight: 500px;">Durasi Pertemuan (Menit) <span style="color: #ef4444;">*</span></label>
             <input type="number" name="duration" class="search-input" placeholder="Contoh: 90" min="1" style="width: 100%; padding: 8px 12px; box-sizing: border-box;" value="{{ old('duration', $course_level->duration) }}" required>
         </div>
 
         <!-- Order Index -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 13px; color: #94a3b8; font-weight: 500px;">Urutan <span style="color: #ef4444;">*</span></label>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+            <label style="font-size: 13px; font-weight: 500px;">Urutan <span style="color: #ef4444;">*</span></label>
             <input type="number" name="order_index" class="search-input" placeholder="Contoh: 1" min="1" style="width: 100%; padding: 8px 12px; box-sizing: border-box;" value="{{ old('order_index', $course_level->order_index) }}" required>
         </div>
 
         <!-- Status -->
         <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 13px; color: #94a3b8; font-weight: 500px;">Status <span style="color: #ef4444;">*</span></label>
+            <label style="font-size: 13px; font-weight: 500px;">Status <span style="color: #ef4444;">*</span></label>
             <select name="is_active" class="filter-select" style="width: 100%; padding: 8px 12px; box-sizing: border-box;" required>
                 <option value="1" {{ old('is_active', $course_level->is_active) == 1 ? 'selected' : '' }}>Active</option>
                 <option value="0" {{ old('is_active', $course_level->is_active) == 0 ? 'selected' : '' }}>Inactive</option>

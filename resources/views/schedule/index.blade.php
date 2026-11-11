@@ -97,7 +97,9 @@
                             <h2 class="card-title" style="font-size: 1.25rem;">Daftar Schedule</h2>
                             <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar schedule dan hak akses aplikasi OSEDU.</p>
                         </div>
+                        @role('Admin')
                         <a href="{{ route('schedule.create') }}" class="btn-primary" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px;">+ Tambah Schedule Baru</a>
+                        @endrole
                     </div>
 
                     <!-- Table Data -->
@@ -110,7 +112,9 @@
                                     <th>START</th>
                                     <th>END</th>
                                     <th>STATUS</th>
+                                    @role('Admin')
                                     <th>ACTIONS</th>
+                                    @endrole
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,6 +125,7 @@
                                     <td>{{ $schedule->start_at }}</td>
                                     <td>{{ $schedule->end_at }}</td>
                                     <td>{{ $schedule->status }}</td>
+                                    @role('Admin')
                                     <td>
                                         <a href="{{ route('schedule.edit', $schedule->id) }}" class="btn-action btn-edit">Edit</a>
                                         <form action="{{ route('schedule.destroy', $schedule->id) }}" method="POST" style="display:inline;">
@@ -129,6 +134,7 @@
                                             <button type="submit" class="btn-action btn-delete" style="border:none; cursor:pointer;" onclick="return confirm('Yakin ingin menghapus schedule ini?')">Delete</button>
                                         </form>
                                     </td>
+                                    @endrole
                                 </tr>
                                 @empty
                                 <tr>

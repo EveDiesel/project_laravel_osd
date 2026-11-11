@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -14,37 +13,37 @@
 
     <style>
         #toolbar-container {
-            background: #172943;
-            border: 1px solid #243954;
+            background: var();
+            border: 1px solid var(--border-color);
             border-radius: 8px 8px 0 0;
         }
 
         #toolbar-container .ql-stroke {
-            stroke: #cbd5e1;
+            stroke: currentColor;
         }
 
         #toolbar-container .ql-fill {
-            fill: #cbd5e1;
+            fill: currentColor;
         }
 
         #toolbar-container .ql-picker {
-            color: #cbd5e1;
+            color: inherit;
         }
 
         #toolbar-container .ql-picker-options {
-            background: #132239;
-            border-color: #243954;
+            background: var();
+            border-color: var(--border-color);
         }
 
         #toolbar-container .ql-picker-item {
-            color: #e2e8f0;
+            color: inherit;
         }
 
         #editor {
             min-height: 220px;
-            background: #132239;
-            color: #e2e8f0;
-            border: 1px solid #243954;
+            background: var();
+            color: inherit;
+            border: 1px solid var(--border-color);
             border-radius: 0 0 8px 8px;
         }
 
@@ -78,13 +77,13 @@
             text-align: justify !important;
         }
 
-        /* TAMBAHAN: GARIS PEMILIHAN GAMBAR */
+        /* Garis Pemilihan Gambar */
         #editor .ql-editor img.selected-image {
             outline: 2px solid #3b82f6;
             outline-offset: 1px;
         }
 
-        /* TAMBAHAN: TITIK BIRU UNTUK RESIZE GAMBAR */
+        /* Titik Biru Resize Gambar */
         .image-resize-handle {
             position: fixed;
             width: 12px;
@@ -111,10 +110,10 @@
     </style>
 </head>
 
-<body class="dashboard-body" style="background: #0b1220; color: #e2e8f0;">
+<body class="dashboard-body">
 
     <!-- TOP NAVBAR -->
-    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background-color: #0d121f; border-bottom: 1px solid #1a2235;">
+    <header class="navbar-top" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
 
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
@@ -133,7 +132,7 @@
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7-7h14a7 7 0 00-7 7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7 7z" />
                     </svg>
                     <span>Profile</span>
                 </a>
@@ -167,11 +166,11 @@
 
                 <!-- HEADER -->
                 <div style="margin-bottom: 24px;">
-                    <a href="{{ route('course-content.index') }}" style="color: #93c5fd; text-decoration: none;">
+                    <a href="{{ route('course-content.index') }}" style="color: #60a5fa; text-decoration: none;">
                         ← Kembali ke Course Content
                     </a>
 
-                    <h1 style="color: white; font-size: 28px; font-weight: 700; margin-top: 20px;">
+                    <h1 style="font-size: 28px; font-weight: 700; margin-top: 20px;">
                         Tambah Course Content Baru
                     </h1>
 
@@ -192,7 +191,7 @@
                 @endif
 
                 <!-- FORM -->
-                <div class="dashboard-card" style="padding: 28px; width: 100%; max-width: 100%; box-sizing: border-box; background: #0f1b30; border: 1px solid #1e3352; border-radius: 14px;">
+                <div class="dashboard-card" style="padding: 28px; width: 100%; max-width: 100%; box-sizing: border-box; border-radius: 14px;">
 
                     <form id="createContentForm" action="{{ route('course-content.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -202,11 +201,11 @@
 
                             <!-- COURSE -->
                             <div class="form-group" style="margin-bottom: 16px;">
-                                <label for="course_id" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                                <label for="course_id" class="form-label" style="display: block; margin-bottom: 8px;">
                                     Course
                                 </label>
 
-                                <select name="course_id" id="course_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <select name="course_id" id="course_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled {{ old('course_id') ? '' : 'selected' }}>Pilih Course...</option>
 
                                     @foreach($courses as $course)
@@ -219,11 +218,11 @@
 
                             <!-- COURSE LEVEL -->
                             <div class="form-group" style="margin-bottom: 16px;">
-                                <label for="course_level_id" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                                <label for="course_level_id" class="form-label" style="display: block; margin-bottom: 8px;">
                                     Course Level
                                 </label>
 
-                                <select name="course_level_id" id="course_level_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <select name="course_level_id" id="course_level_id" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled {{ old('course_level_id') ? '' : 'selected' }}>Pilih Course Level...</option>
 
                                     @foreach($levels as $level)
@@ -237,11 +236,11 @@
 
                         <!-- TITLE -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <label for="title" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                            <label for="title" class="form-label" style="display: block; margin-bottom: 8px;">
                                 Judul Content
                             </label>
 
-                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" placeholder="Masukkan judul content..." required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" placeholder="Masukkan judul content..." required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color);">
                         </div>
 
                         <!-- CONTENT TYPE & SESSION -->
@@ -249,11 +248,11 @@
 
                             <!-- CONTENT TYPE -->
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="content_type" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                                <label for="content_type" class="form-label" style="display: block; margin-bottom: 8px;">
                                     Content Type
                                 </label>
 
-                                <select name="content_type" id="content_type" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <select name="content_type" id="content_type" class="form-control filter-select" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
                                     <option value="" disabled {{ old('content_type') ? '' : 'selected' }}>Pilih Content Type...</option>
                                     <option value="video" {{ old('content_type') == 'video' ? 'selected' : '' }}>Video</option>
                                     <option value="pdf" {{ old('content_type') == 'pdf' ? 'selected' : '' }}>PDF</option>
@@ -265,17 +264,17 @@
 
                             <!-- SESSION -->
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="session" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                                <label for="session" class="form-label" style="display: block; margin-bottom: 8px;">
                                     Session
                                 </label>
 
-                                <input type="number" name="session" id="session" class="form-control" value="{{ old('session') }}" placeholder="Masukkan nomor session..." min="1" required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; background: #132239; color: white; border: 1px solid #243954;">
+                                <input type="number" name="session" id="session" class="form-control" value="{{ old('session') }}" placeholder="Masukkan nomor session..." min="1" required style="width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color);">
                             </div>
                         </div>
 
                         <!-- CONTENT QUILL EDITOR -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <label for="editor" class="form-label" style="color: #93c5fd; display: block; margin-bottom: 8px;">
+                            <label for="editor" class="form-label" style="display: block; margin-bottom: 8px;">
                                 Content
                             </label>
 
@@ -349,13 +348,13 @@
                         </div>
 
                         <!-- ACTIONS -->
-                        <div class="form-actions" style="display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; border-top: 1px solid #243954; padding-top: 20px; margin-top: 24px;">
+                        <div class="form-actions" style="display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 24px;">
 
-                            <a href="{{ route('course-content.index') }}" style="background: #1e3a6d; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+                            <a href="{{ route('course-content.index') }}" class="btn-action" style="background: #334155; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
                                 Batal
                             </a>
 
-                            <button type="submit" class="btn-primary" style="background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                            <button type="submit" class="btn-primary" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
                                 Simpan Course Content
                             </button>
                         </div>
@@ -387,10 +386,7 @@
             }
         });
 
-        // =====================================================
-        // TAMBAHAN: RESIZE GAMBAR DENGAN TITIK BIRU
-        // =====================================================
-
+        //rezize image
         const editorElement = quill.root;
         let selectedImage = null;
         let resizeHandle = null;
@@ -434,18 +430,13 @@
         }
 
         function startImageResize(startX, image) {
-            if (!image) {
-                return;
-            }
+            if (!image) return;
 
             isResizingImage = true;
-
             const startWidth = image.getBoundingClientRect().width;
 
             function resizeTo(clientX) {
-                if (!image.isConnected) {
-                    return;
-                }
+                if (!image.isConnected) return;
 
                 const editorRect = editorElement.getBoundingClientRect();
                 const imageRect = image.getBoundingClientRect();
@@ -490,18 +481,13 @@
         }
 
         function startImageTouchResize(startX, image) {
-            if (!image) {
-                return;
-            }
+            if (!image) return;
 
             isResizingImage = true;
-
             const startWidth = image.getBoundingClientRect().width;
 
             function resizeTo(clientX) {
-                if (!image.isConnected) {
-                    return;
-                }
+                if (!image.isConnected) return;
 
                 const editorRect = editorElement.getBoundingClientRect();
                 const imageRect = image.getBoundingClientRect();
@@ -526,10 +512,7 @@
             }
 
             function touchMove(event) {
-                if (!event.touches.length) {
-                    return;
-                }
-
+                if (!event.touches.length) return;
                 event.preventDefault();
                 resizeTo(event.touches[0].clientX);
             }
@@ -546,71 +529,48 @@
                 }
             }
 
-            document.addEventListener('touchmove', touchMove, {
-                passive: false
-            });
-
+            document.addEventListener('touchmove', touchMove, { passive: false });
             document.addEventListener('touchend', touchEnd);
         }
 
-        // Klik gambar untuk menampilkan titik biru.
         editorElement.addEventListener('click', function (event) {
-            if (isResizingImage) {
-                return;
-            }
+            if (isResizingImage) return;
 
             if (event.target.tagName === 'IMG') {
                 showResizeHandle(event.target);
-            } else if (
-                !resizeHandle ||
-                !resizeHandle.contains(event.target)
-            ) {
+            } else if (!resizeHandle || !resizeHandle.contains(event.target)) {
                 removeResizeHandle();
             }
         });
 
-        // Tarik titik biru menggunakan mouse.
         document.addEventListener('mousedown', function (event) {
-            if (!resizeHandle || !resizeHandle.contains(event.target)) {
-                return;
-            }
+            if (!resizeHandle || !resizeHandle.contains(event.target)) return;
 
             event.preventDefault();
             event.stopPropagation();
 
             const image = selectedImage;
-
             if (image) {
                 startImageResize(event.clientX, image);
             }
         });
 
-        // Tarik titik biru menggunakan layar sentuh.
         document.addEventListener('touchstart', function (event) {
-            if (!resizeHandle || !resizeHandle.contains(event.target)) {
-                return;
-            }
+            if (!resizeHandle || !resizeHandle.contains(event.target)) return;
 
             event.preventDefault();
-
             const touch = event.touches[0];
             const image = selectedImage;
 
             if (touch && image) {
                 startImageTouchResize(touch.clientX, image);
             }
-        }, {
-            passive: false
-        });
+        }, { passive: false });
 
-        // Posisi titik mengikuti gambar saat editor digulir.
         editorElement.addEventListener('scroll', positionResizeHandle);
         window.addEventListener('resize', positionResizeHandle);
-
-        // Perbarui posisi ketika halaman digulir.
         window.addEventListener('scroll', positionResizeHandle, true);
 
-        // Sembunyikan titik jika pengguna mengeklik di luar editor.
         document.addEventListener('mousedown', function (event) {
             if (
                 selectedImage &&
@@ -621,10 +581,7 @@
             }
         });
 
-        // =====================================================
-        // FITUR ASLI: UPLOAD/PILIH BEBERAPA GAMBAR
-        // =====================================================
-
+        // UPLOAD GAMBAR
         function imageHandler() {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
@@ -634,24 +591,17 @@
 
             input.onchange = function () {
                 const files = Array.from(input.files || []);
-
-                if (files.length === 0) {
-                    return;
-                }
+                if (files.length === 0) return;
 
                 files.forEach(function (file) {
-                    if (!file.type.startsWith('image/')) {
-                        return;
-                    }
+                    if (!file.type.startsWith('image/')) return;
 
                     const reader = new FileReader();
-
                     reader.onload = function (e) {
                         const range = quill.getSelection(true);
                         quill.insertEmbed(range.index, 'image', e.target.result, 'user');
                         quill.setSelection(range.index + 1, 0, 'silent');
                     };
-
                     reader.readAsDataURL(file);
                 });
             };
@@ -659,22 +609,18 @@
 
         // RESTORE CONTENT IF VALIDATION FAILS
         const oldContent = {!! json_encode(old('content', '')) !!};
-
         if (oldContent) {
             quill.root.innerHTML = oldContent;
         }
 
-        // UNDO
         document.getElementById('undoEditor').addEventListener('click', function () {
             quill.history.undo();
         });
 
-        // REDO
         document.getElementById('redoEditor').addEventListener('click', function () {
             quill.history.redo();
         });
 
-        // SAVE EDITOR CONTENT BEFORE SUBMIT
         document.getElementById('createContentForm').addEventListener('submit', function (e) {
             const content = quill.root.innerHTML.trim();
             const plainText = quill.getText().trim();
@@ -690,7 +636,6 @@
             document.getElementById('content').value = content;
         });
 
-        // USER MENU DROPDOWN
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('userMenuBtn');
             const dropdown = document.getElementById('userMenuDropdown');
