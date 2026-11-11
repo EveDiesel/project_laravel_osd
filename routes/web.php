@@ -10,6 +10,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\CourseQuizController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,6 +45,11 @@ Route::middleware(['auth'])->group(function () {
     // 5. Delete / Destroy
     Route::delete('course-content/{id}', [CourseContentController::class, 'destroy'])->name('course-content.destroy');
 
+    //COURSE QUIZ
+    Route::post('course-quiz/{courseQuiz}/questions', [CourseQuizController::class, 'storeQuestion'])->name('course-quiz.questions.store');
+    Route::delete('course-quiz/{courseQuiz}/questions/{questionId}', [CourseQuizController::class, 'destroyQuestion'])->name('course-quiz.questions.destroy');
+    Route::post('course-quiz/{courseQuiz}/submit', [CourseQuizController::class, 'submitQuiz'])->name('course-quiz.submit');
+    
     //OTHERS
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class); 
@@ -52,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('course-level', CourseLevelController::class);
     Route::resource('activity', ActivityController::class);
     Route::resource('schedule', ScheduleController::class);
+    Route::resource('course-student', CourseStudentController::class);
+    Route::resource('course-quiz', CourseQuizController::class);
 });
 
 require __DIR__.'/auth.php';

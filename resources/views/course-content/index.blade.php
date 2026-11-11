@@ -154,7 +154,7 @@
                                             </div>
                                         </td>
 
-                                        @role('Admin') 
+                                        @role('Admin')
                                         <td>
                                             <form action="{{ route('course-content.destroy', $cont->id) }}" method="POST" style="display:inline;">
                                                 @csrf

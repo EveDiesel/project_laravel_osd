@@ -92,11 +92,17 @@ class CourseContentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course_Content $course_content)
+    public function destroy($id)
     {
-        $course_content->delete();
+        try {
+            $content = Course_Content::findOrFail($id);
+            $content->delete();
 
-        return redirect()->route('course-content.index')
-                         ->with('success', 'Konten kursus berhasil dihapus.');
+            return redirect()->route('course-content.index')
+                            ->with('success', 'Konten kursus berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Ini akan menampilkan pesan asli jika database menolak penghapusan
+            return redirect()->back()->with('error', 'Gagal menghapus karena ada data terkait: ' . $e->getMessage());
+        }
     }
 }
