@@ -12,6 +12,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseQuizController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -65,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('schedule', ScheduleController::class);
     Route::resource('course-student', CourseStudentController::class);
     Route::resource('course-quiz', CourseQuizController::class);
+
+    Route::resource('students', StudentController::class);
 });
 
 require __DIR__.'/auth.php';

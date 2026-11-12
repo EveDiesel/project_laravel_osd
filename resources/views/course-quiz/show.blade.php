@@ -141,14 +141,12 @@
                         </div>
                     @endhasanyrole
 
-                   {{-- =================================================== --}}
-                    {{-- TAMPILAN UNTUK STUDENT (MENGERJAKAN & SUBMIT QUIZ) --}}
-                    {{-- =================================================== --}}
+                   <!-- student -->
                     @role('Student')
                         @if(empty($courseQuiz->questions))
                             <p style="color: #94a3b8; text-align: center; padding: 30px;">Quiz ini belum memiliki soal.</p>
                         @else
-                            {{-- PERBAIKAN: Tag <form> dibuka dan ditutup membungkus seluruh soal dan tombol submit --}}
+                           
                             <form action="{{ route('course-quiz.submit', $courseQuiz->id) }}" method="POST">
                                 @csrf
                                 <div style="display: flex; flex-direction: column; gap: 20px;">
