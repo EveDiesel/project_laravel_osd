@@ -37,9 +37,10 @@ class CourseQuizController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Course_Quiz::create($validatedData);
+        $courseQuiz = Course_Quiz::create($validatedData);
 
-        return redirect()->route('course-quiz.index')->with('success', 'Course quiz created successfully.');
+           return redirect()->route('course-quiz.show', $courseQuiz->id)
+                     ->with('success', 'Quiz berhasil dibuat! Silakan tambahkan pertanyaan.');
     }
 
     /**
@@ -68,6 +69,7 @@ class CourseQuizController extends Controller
         $validatedData = $request->validate([
             'course_content_id' => 'required|exists:course_contents,id',
             'name' => 'required|string|max:255',
+            'questions' => 'nullable|array',
         ]);
 
         $courseQuiz->update($validatedData);

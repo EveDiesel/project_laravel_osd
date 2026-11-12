@@ -24,12 +24,17 @@ class Course_Content extends Model
     ];
 
     public function courseLevel()
-{
-    return $this->belongsTo(Course_Level::class, 'course_level_id');
-}
+    {
+        return $this->belongsTo(Course_Level::class, 'course_level_id');
+    }
 
-public function course()
-{
-    return $this->belongsTo(Course::class, 'course_id');
-}
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Course_Quiz::class, 'course_content_id', 'id');
+    }
 }

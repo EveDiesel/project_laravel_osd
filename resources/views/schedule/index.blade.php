@@ -27,9 +27,17 @@
             justify-content: space-between;
             align-items: center;
         }
+      
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-active { background-color: #d1fae5; color: #065f46; }
+        .badge-inactive { background-color: #f1f5f9; color: #64748b; }
     </style>
-
-    {{ $schedules->links() }}
 </head>
 <body class="dashboard-body">
 
@@ -94,13 +102,27 @@
                     <!-- Header Section & Action Button -->
                     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div>
-                            <h2 class="card-title" style="font-size: 1.25rem;">Daftar Schedule</h2>
-                            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar schedule dan hak akses aplikasi OSEDU.</p>
+
+                            @role('Tutor')
+                                <h2 class="card-title" style="font-size: 1.25rem;">Jadwal Mengajar Saya</h2>
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Pantau daftar jadwal sesi kelas dan aktivitas pengajaran Anda di OSEDU.</p>
+                            @else
+                                <h2 class="card-title" style="font-size: 1.25rem;">Daftar Schedule</h2>
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar schedule dan hak akses aplikasi OSEDU.</p>
+                            @endrole
                         </div>
+
                         @role('Admin')
                         <a href="{{ route('schedule.create') }}" class="btn-primary" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px;">+ Tambah Schedule Baru</a>
                         @endrole
                     </div>
+
+                    <!-- Info Card Khusus Tutor -->
+                    @role('Tutor')
+                    <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85rem; color: #93c5fd;">
+                         <strong>Catatan Tutor:</strong> Pastikan hadir tepat waktu sesuai rentang tanggal dan waktu aktivitas yang tertera pada tabel di bawah.
+                    </div>
+                    @endrole
 
                     <!-- Table Data -->
                     <div class="table-responsive">
@@ -121,10 +143,20 @@
                                 @forelse($schedules as $index => $schedule)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $schedule->activity->name ?? '-' }}</td>
+                                    <td>
+                                        <span style="font-weight: 500; color: #f8fafc;">{{ $schedule->activity->name ?? '-' }}</span>
+                                    </td>
                                     <td>{{ $schedule->start_at }}</td>
                                     <td>{{ $schedule->end_at }}</td>
-                                    <td>{{ $schedule->status }}</td>
+                                    <td>
+                                        @if(strtolower($schedule->status) == 'active')
+                                            <span class="badge-status badge-active">Active</span>
+                                        @else
+                                            <span class="badge-status badge-inactive">{{ ucfirst($schedule->status) }}</span>
+                                        @endif
+                                    </td>
+                                    
+                                    <!-- Admin -->
                                     @role('Admin')
                                     <td>
                                         <a href="{{ route('schedule.edit', $schedule->id) }}" class="btn-action btn-edit">Edit</a>
@@ -138,7 +170,13 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" style="text-align: center; color: #94a3b8; padding: 20px;">Tidak ada data schedule.</td>
+                                    <td colspan="{{ auth()->user()->hasRole('Admin') ? '6' : '5' }}" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                        @role('Tutor')
+                                            Belum ada jadwal mengajar yang ditugaskan kepada Anda.
+                                        @else
+                                            Tidak ada data schedule.
+                                        @endrole
+                                    </td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -156,7 +194,7 @@
             </div>
         </main>
 
-    </div>                        
+    </div>                    
 
     <!-- Script JavaScript Dropdown Profile -->
     <script>

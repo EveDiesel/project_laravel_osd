@@ -48,7 +48,11 @@ Route::middleware(['auth'])->group(function () {
     //COURSE QUIZ
     Route::post('course-quiz/{courseQuiz}/questions', [CourseQuizController::class, 'storeQuestion'])->name('course-quiz.questions.store');
     Route::delete('course-quiz/{courseQuiz}/questions/{questionId}', [CourseQuizController::class, 'destroyQuestion'])->name('course-quiz.questions.destroy');
-    Route::post('course-quiz/{courseQuiz}/submit', [CourseQuizController::class, 'submitQuiz'])->name('course-quiz.submit');
+    
+    Route::post('course-quiz/{quizId}/submit', [CourseQuizController::class, 'submitQuiz'])->name('course-quiz.submit');
+    
+    Route::get('course-quiz/{courseQuiz}/results', [CourseQuizController::class, 'showResults'])->name('course-quiz.results');
+    Route::get('course-content/{courseContentId}/quiz/create', [CourseQuizController::class, 'create'])->name('quiz.create');
     
     //OTHERS
     Route::resource('users', UserController::class);

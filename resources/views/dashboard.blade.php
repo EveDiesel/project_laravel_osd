@@ -13,5 +13,11 @@
         <div class="quick-stats">
         </div>
     @endrole
+
+    @role('Tutor')
+        <p class="card-desc" style="margin-bottom: 20px; color: #94a3b8;">As a tutor, you can create and manage your courses, quizzes, and track student progress.</p>
+        <div class="quick-stats">
+        </div>
+    @endrole
 </div>
 @endsection

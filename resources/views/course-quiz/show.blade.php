@@ -141,13 +141,14 @@
                         </div>
                     @endhasanyrole
 
-                    {{-- =================================================== --}}
+                   {{-- =================================================== --}}
                     {{-- TAMPILAN UNTUK STUDENT (MENGERJAKAN & SUBMIT QUIZ) --}}
                     {{-- =================================================== --}}
                     @role('Student')
                         @if(empty($courseQuiz->questions))
                             <p style="color: #94a3b8; text-align: center; padding: 30px;">Quiz ini belum memiliki soal.</p>
                         @else
+                            {{-- PERBAIKAN: Tag <form> dibuka dan ditutup membungkus seluruh soal dan tombol submit --}}
                             <form action="{{ route('course-quiz.submit', $courseQuiz->id) }}" method="POST">
                                 @csrf
                                 <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -167,7 +168,7 @@
 
                                 <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center;">
                                     <a href="{{ route('course-quiz.index') }}" class="btn-action" style="background: #334155; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-size: 0.85rem;">Kembali</a>
-                                    <button type="submit" class="btn-primary" style="padding: 10px 24px; font-size: 0.9rem;" onclick="return confirm('Kumpul jawaban sekarang? Progress Anda akan diperbarui.')">Kumpul Jawaban Quiz</button>
+                                    <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">Submit Quiz</button>
                                 </div>
                             </form>
                         @endif

@@ -229,6 +229,21 @@
 
                         <!-- TOMBOL EDIT DAN DELETE (Hanya Admin/Tutor) -->
                         @role('Admin|Tutor')
+
+                        <div class="quiz-info-section" style="margin-top: 15px; padding: 10px; border-radius: 8px;">
+                                <p style="color: #cbd5e1; font-size: 0.9rem;">
+                                    Total Quiz untuk materi ini: 
+                                    <strong style="color: #38bdf8;">{{ $contents->quizzes->count() }} Quiz</strong>
+                                </p>
+                                <a href="{{ route('course-quiz.index', ['courseContentId' => $contents->id]) }}" class="btn-action" style="display: inline-block; background-color: #3b82f6; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; margin-top: 8px; font-size: 0.85rem;">
+                                    Lihat Daftar Quiz
+                                </a>
+                                <a href="{{ route('quiz.create', ['courseContentId' => $contents->id]) }}" class="btn-primary" style="display: inline-block; background: #10b981; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; margin-top: 8px; font-size: 0.85rem;">
+                                    + Buat Quiz Baru
+                                </a>
+                                
+                            </div>
+
                         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                             <a href="{{ route('course-content.edit', $contents->id) }}" style="display: inline-block; background: #2563eb; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">
                                 ✎ Edit

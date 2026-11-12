@@ -27,6 +27,22 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        /* Styling Tambahan untuk Progress Bar & Card Tutor */
+        .progress-bar-container {
+            background-color: #e5e7eb;
+            width: 100%;
+            border-radius: 9999px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #38bdf8;
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body class="dashboard-body">
@@ -92,10 +108,19 @@
                     <!-- Header Section & Action Button -->
                     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div>
-                            <h2 class="card-title" style="font-size: 1.25rem;">Daftar Student Courses</h2>
-                            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar course dan hak akses aplikasi OSEDU.</p>
+                            @role('Tutor')
+                                <h2 class="card-title" style="font-size: 1.25rem;">Monitoring Progress Belajar Murid</h2>
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Pantau sejauh mana murid menyelesaikan kuis (Target: 8 Quiz = 100%).</p>
+                            @else
+                                <h2 class="card-title" style="font-size: 1.25rem;">Daftar Student Courses</h2>
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar course dan hak akses aplikasi OSEDU.</p>
+                            @endrole
                         </div>
+
+                        <!-- Tombol Tambah HANYA untuk Admin -->
+                        @role('Admin')
                         <a href="{{ route('course-student.create') }}" class="btn-primary" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px;">+ Tambah Course Baru</a>
+                        @endrole
                     </div>
 
                     <!-- Table Data -->
@@ -105,22 +130,43 @@
                                 <tr>
                                     <th>NO</th>
                                     <th>COURSE</th>
-                                    <th>USER</th>
-                                    <th>PERCENTAGE</th>
+                                    <th>USER / MURID</th>
+                                    <th>PROGRESS KUIS (8 QUIZ)</th>
                                     <th>JOINED</th>
                                     <th>COMPLETED</th>
+                                    @role('Admin')
                                     <th>ACTIONS</th>
+                                    @endrole
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($courseStudents as $index => $courseStudent)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $courseStudent->course->title ?? '-' }}</td>
+                                    <td><span style="font-weight: 500;">{{ $courseStudent->course->title ?? '-' }}</span></td>
                                     <td>{{ $courseStudent->user->email ?? '-' }}</td>
-                                    <td>{{ $courseStudent->percentage ?? '-' }}</td>
+                                    
+                                    <!-- Kolom Progress Bar khusus untuk visualisasi Tutor -->
+                                    <td style="width: 25%;">
+                                        @php
+                                            $percent = $courseStudent->percentage ?? 0;
+                                            $cleanPercent = floatval(str_replace('%', '', $percent));
+                                        @endphp
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                                            <span>{{ $cleanPercent }}% Selesai</span>
+                                            <!-- Contoh asumsi 8 quiz total -->
+                                            <span>{{ round(($cleanPercent / 100) * 8) }} / 8 Quiz</span>
+                                        </div>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill" style="width: {{ $cleanPercent }}%;"></div>
+                                        </div>
+                                    </td>
+
                                     <td>{{ $courseStudent->joined_at ? \Carbon\Carbon::parse($courseStudent->joined_at)->format('d M Y') : '-' }}</td>
                                     <td>{{ $courseStudent->completed_at ? \Carbon\Carbon::parse($courseStudent->completed_at)->format('d M Y') : '-' }}</td>
+                                    
+                                    <!-- Kolom Aksi HANYA untuk Admin -->
+                                    @role('Admin')
                                     <td>
                                         <a href="{{ route('course-student.edit', $courseStudent->id) }}" class="btn-action btn-edit">Edit</a>
                                         <form action="{{ route('course-student.destroy', $courseStudent->id) }}" method="POST" style="display:inline;">
@@ -129,10 +175,11 @@
                                             <button type="submit" class="btn-action btn-delete" style="border:none; cursor:pointer;" onclick="return confirm('Yakin ingin menghapus course student ini?')">Delete</button>
                                         </form>
                                     </td>
+                                    @endrole
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">Tidak ada data course student.</td>
+                                    <td colspan="{{ auth()->user()->hasRole('Admin') ? '7' : '6' }}" style="text-align: center; color: #94a3b8; padding: 20px;">Tidak ada data course student.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
