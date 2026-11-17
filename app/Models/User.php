@@ -51,4 +51,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Entity::class);
     }
+
+    public function courseStudents()
+    {
+        return $this->hasMany(Course_Student::class, 'user_id');
+    }
+
+    public function courses()
+    {
+        return $this->hasManyThrough(Course::class, Entity::class, 'user_id', 'created_by', 'id', 'id');
+    }
 }

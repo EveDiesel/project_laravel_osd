@@ -6,14 +6,11 @@
 
     <title>Manage Schedule - OSEDU Bright Future</title>
 
-    <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
     <style>
-        /* Memaksa ikon panah pagination jadi kecil */
         .pagination-wrapper svg, 
         .pagination-wrapper nav svg {
             width: 14px !important;
@@ -41,13 +38,11 @@
 </head>
 <body class="dashboard-body">
 
-    <!-- TOP NAVBAR -->
     <header class="navbar-top">
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
         </a>
 
-        <!-- Profile & Logout Dropdown -->
         <div class="user-dropdown-wrapper">
             <button class="dropdown-trigger" id="userMenuBtn">
                 <span>{{ Auth::user()->name ?? Auth::user()->email }}</span>
@@ -56,7 +51,6 @@
                 </svg>
             </button>
 
-            <!-- Dropdown Content -->
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,17 +74,13 @@
         </div>
     </header>
 
-    <!-- WRAPPER DASHBOARD -->
     <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 80px);">
         
-        <!-- SIDEBAR -->
         @include('sidebar')
 
-        <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             <div class="content-body" style="width: 100%;">
                 
-                <!-- Notifikasi Success -->
                 @if(session('success'))
                     <div class="alert alert-success" style="padding: 12px 16px; background-color: #d1fae5; color: #065f46; border-radius: 8px; margin-bottom: 20px;">
                         {{ session('success') }}
@@ -99,13 +89,14 @@
 
                 <div class="dashboard-card">
                     
-                    <!-- Header Section & Action Button -->
                     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div>
-
                             @role('Tutor')
                                 <h2 class="card-title" style="font-size: 1.25rem;">Jadwal Mengajar Saya</h2>
                                 <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Pantau daftar jadwal sesi kelas dan aktivitas pengajaran Anda di OSEDU.</p>
+                            @elserole('Student')
+                                <h2 class="card-title" style="font-size: 1.25rem;">Jadwal Belajar Saya</h2>
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Pantau jadwal kegiatan dan sesi kelas untuk course yang Anda ikuti.</p>
                             @else
                                 <h2 class="card-title" style="font-size: 1.25rem;">Daftar Schedule</h2>
                                 <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Kelola daftar schedule dan hak akses aplikasi OSEDU.</p>
@@ -117,14 +108,18 @@
                         @endrole
                     </div>
 
-                    <!-- Info Card Khusus Tutor -->
                     @role('Tutor')
                     <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85rem; color: #93c5fd;">
                          <strong>Catatan Tutor:</strong> Pastikan hadir tepat waktu sesuai rentang tanggal dan waktu aktivitas yang tertera pada tabel di bawah.
                     </div>
                     @endrole
 
-                    <!-- Table Data -->
+                    @role('Student')
+                    <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85rem; color: #6ee7b7;">
+                         <strong>Catatan Siswa:</strong> Berikut adalah jadwal kegiatan belajar yang terikat dengan course Anda.
+                    </div>
+                    @endrole
+
                     <div class="table-responsive">
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
@@ -156,7 +151,6 @@
                                         @endif
                                     </td>
                                     
-                                    <!-- Admin -->
                                     @role('Admin')
                                     <td>
                                         <a href="{{ route('schedule.edit', $schedule->id) }}" class="btn-action btn-edit">Edit</a>
@@ -173,6 +167,8 @@
                                     <td colspan="{{ auth()->user()->hasRole('Admin') ? '6' : '5' }}" style="text-align: center; color: #94a3b8; padding: 20px;">
                                         @role('Tutor')
                                             Belum ada jadwal mengajar yang ditugaskan kepada Anda.
+                                        @elserole('Student')
+                                            Belum ada jadwal belajar untuk course Anda saat ini.
                                         @else
                                             Tidak ada data schedule.
                                         @endrole
@@ -183,7 +179,6 @@
                         </table>
                     </div>
 
-                    <!-- Pagination jika menggunakan paginate -->
                     @if(method_exists($schedules, 'links'))
                     <div class="pagination-wrapper" style="margin-top: 20px;">
                         {{ $schedules->links() }}
@@ -196,7 +191,6 @@
 
     </div>                    
 
-    <!-- Script JavaScript Dropdown Profile -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('userMenuBtn');

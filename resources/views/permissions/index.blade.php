@@ -13,7 +13,6 @@
     <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
 
-    <div class="pagination-wrapper" style="margin-top: 20px;">
     <style>
         /* Memaksa ikon panah pagination jadi kecil */
         .pagination-wrapper svg, 
@@ -30,9 +29,6 @@
             align-items: center;
         }
     </style>
-    
-    {{ $permissions->links() }}
-</div>
 </head>
 <body class="dashboard-body">
 

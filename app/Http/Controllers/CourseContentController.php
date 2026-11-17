@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Course_Content;
 use App\Models\Course_Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseContentController extends Controller
 {
@@ -14,7 +15,19 @@ class CourseContentController extends Controller
      */
     public function index()
     {
-        $contents = Course_Content::with(['course', 'courseLevel'])->latest()->paginate(10);
+        $user = Auth::user();
+
+        if ($user->hasRole('Student')) {
+            $enrolledCourseIds = $user->courseStudents()->pluck('course_id');
+
+            $contents = Course_Content::whereIn('course_id', $enrolledCourseIds)
+                        ->with(['course', 'courseLevel'])
+                        ->latest()
+                        ->paginate(10);
+        } else {
+            $contents = Course_Content::with(['course', 'courseLevel'])->latest()->paginate(10);
+        }
+
         return view('course-content.index', compact('contents'));
     }
 

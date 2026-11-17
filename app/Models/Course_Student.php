@@ -6,8 +6,6 @@ use App\Models\Course;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 class Course_Student extends Model
@@ -21,6 +19,12 @@ class Course_Student extends Model
         'is_complete',
         'joined_at',
         'completed_at',
+        'completed_quizzes',
+    ];
+
+    protected $casts = [
+        'completed_quizzes' => 'array',
+        'is_complete' => 'boolean',
     ];
 
     public function course()

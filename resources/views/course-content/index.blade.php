@@ -11,14 +11,11 @@
 
     <title>Manage Course Content - OSEDU Bright Future</title>
 
-    <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Style CSS -->
     @vite(['resources/css/style.css', 'resources/css/crud.css'])
 
-    <!-- Tambahan Styling Inline Khusus Pill Card Content agar Super Rapi -->
     <style>
         .content-pill {
             display: flex;
@@ -27,7 +24,7 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 6px 10px;
-            border-radius: 50px; /* Bentuk pill melengkung */
+            border-radius: 50px;
             max-width: 300px;
         }
         .content-pill-thumb {
@@ -45,7 +42,6 @@
         }
         .content-pill-text {
             font-size: 0.8rem;
-            color: #cbd5e1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -54,13 +50,11 @@
 </head>
 <body class="dashboard-body">
 
-    <!-- TOP NAVBAR -->
     <header class="navbar-top">
         <a href="{{ route('dashboard') }}" class="navbar-brand" style="display: flex; align-items: center;">
             <img src="{{ Vite::asset('resources/image/logoosedu.png') }}" alt="OSEDU Logo" style="height: 120px; width: auto;">
         </a>
 
-        <!-- Profile & Logout Dropdown -->
         <div class="user-dropdown-wrapper">
             <button class="dropdown-trigger" id="userMenuBtn">
                 <span>{{ Auth::user()->name ?? Auth::user()->email }}</span>
@@ -69,7 +63,6 @@
                 </svg>
             </button>
 
-            <!-- Dropdown Content -->
             <div class="dropdown-menu-card" id="userMenuDropdown">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,17 +86,13 @@
         </div>
     </header>
 
-    <!-- WRAPPER DASHBOARD -->
     <div class="app-layout" style="display: flex; width: 100%; min-height: calc(100vh - 80px);">
         
-        <!-- SIDEBAR -->
         @include('sidebar')
 
-        <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             <div class="content-body" style="width: 100%;">
                 
-                <!-- Notifikasi Success -->
                 @if(session('success'))
                     <div class="alert alert-success" style="padding: 12px 16px; background-color: #d1fae5; color: #065f46; border-radius: 8px; margin-bottom: 20px;">
                         {{ session('success') }}
@@ -113,7 +102,6 @@
                 <div class="dashboard-card">
                     
                 @hasanyrole('Admin|Tutor')
-                    <!-- Header Section & Action Button -->
                     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div>
                             <h2 class="card-title" style="font-size: 1.25rem;">Course Content</h2>
@@ -132,7 +120,6 @@
                     </div>
                 @endrole
 
-                    <!-- Table Data -->
                     <div class="table-responsive">
                         <table style="width: 100%; border-collapse: collapse; vertical-align: middle;">
                             <thead>
@@ -157,11 +144,20 @@
                                 @forelse($contents as $index => $cont)
                                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                                     @if($stu)
-                                        <!-- Isi Baris khusus Student -->
                                         <td><strong>{{ $cont->title }}</strong></td>
                                         <td>
                                             <div class="content-pill">
-                                                <div class="content-pill-thumb">📄</div>
+                                                @php
+                                                    preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $cont->content, $matches);
+                                                    $firstImg = $matches[1] ?? null;
+                                                @endphp
+
+                                                @if($firstImg)
+                                                    <img src="{{ $firstImg }}" alt="Thumb" class="content-pill-thumb">
+                                                @else
+                                                    <div class="content-pill-thumb">-</div>
+                                                @endif
+
                                                 <div class="content-pill-text">{{ Str::limit(strip_tags($cont->content), 40) }}</div>
                                             </div>
                                         </td>
@@ -169,7 +165,6 @@
                                             <a href="{{ route('course-content.show', $cont->id) }}" class="btn-action btn-edit" style="text-decoration: none">Lihat</a>
                                         </td>
                                     @else
-                                        <!-- Isi Baris untuk Admin & Tutor -->
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $cont->course->title ?? '-' }}</td>
                                         <td><strong>{{ $cont->courseLevel->name ?? '-' }}</strong></td>
@@ -181,10 +176,8 @@
                                         
                                         <td>{{ $cont->session }}</td>
                                         <td>
-                                            <!-- Pill Card Compact untuk menghindari gambar melar -->
                                             <div class="content-pill">
                                                 @php
-                                                    // Ambil gambar pertama dari konten HTML jika ada, atau tampilkan icon default
                                                     preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $cont->content, $matches);
                                                     $firstImg = $matches[1] ?? null;
                                                 @endphp
@@ -215,7 +208,6 @@
                         </table>
                     </div>
 
-                    <!-- Pagination jika menggunakan paginate -->
                     @if(method_exists($contents, 'links'))
                     <div class="pagination-wrapper" style="margin-top: 20px;">
                         {{ $contents->links() }}
@@ -228,7 +220,6 @@
 
     </div>
 
-    <!-- Script JavaScript Dropdown Profile -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('userMenuBtn');

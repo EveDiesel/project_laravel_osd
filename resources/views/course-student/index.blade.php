@@ -131,7 +131,6 @@
                                     <th>NO</th>
                                     <th>COURSE</th>
                                     <th>USER / MURID</th>
-                                    <th>PROGRESS KUIS (8 QUIZ)</th>
                                     <th>JOINED</th>
                                     <th>COMPLETED</th>
                                     @role('Admin')
@@ -145,22 +144,6 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td><span style="font-weight: 500;">{{ $courseStudent->course->title ?? '-' }}</span></td>
                                     <td>{{ $courseStudent->user->email ?? '-' }}</td>
-                                    
-                                    <!-- Kolom Progress Bar khusus untuk visualisasi Tutor -->
-                                    <td style="width: 25%;">
-                                        @php
-                                            $percent = $courseStudent->percentage ?? 0;
-                                            $cleanPercent = floatval(str_replace('%', '', $percent));
-                                        @endphp
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                                            <span>{{ $cleanPercent }}% Selesai</span>
-                                            <!-- Contoh asumsi 8 quiz total -->
-                                            <span>{{ round(($cleanPercent / 100) * 8) }} / 8 Quiz</span>
-                                        </div>
-                                        <div class="progress-bar-container">
-                                            <div class="progress-bar-fill" style="width: {{ $cleanPercent }}%;"></div>
-                                        </div>
-                                    </td>
 
                                     <td>{{ $courseStudent->joined_at ? \Carbon\Carbon::parse($courseStudent->joined_at)->format('d M Y') : '-' }}</td>
                                     <td>{{ $courseStudent->completed_at ? \Carbon\Carbon::parse($courseStudent->completed_at)->format('d M Y') : '-' }}</td>

@@ -65,16 +65,6 @@
                         <a href="{{ route('entity.create') }}" class="btn-primary" style="font-size: 0.8rem; padding: 8px 14px;">+ Tambah Entity Baru</a>
                     </div>
 
-                    <div class="filter-section" style="display: flex; gap: 10px; margin-bottom: 16px;">
-                        <input type="text" placeholder="Cari Nama..." class="search-input" style="font-size: 0.8rem; padding: 6px 12px;">
-                        <select class="filter-select" style="font-size: 0.8rem; padding: 6px 12px;">
-                            <option value="">Filter Kota</option>
-                        </select>
-                        <select class="filter-select" style="font-size: 0.8rem; padding: 6px 12px;">
-                            <option value="">Tipe Akun</option>
-                        </select>
-                    </div>
-
                     <div class="table-responsive" style="padding-bottom: 8px; overflow-x: auto;">
                         <table class="compact-table" style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
                             <thead>

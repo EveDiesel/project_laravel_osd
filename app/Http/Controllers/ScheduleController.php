@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Schedule;
 Use App\Models\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -13,7 +14,35 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules = Schedule::with('activity')->paginate(10);
+        $user = Auth::user();
+
+        if ($user->hasRole('Student')) {
+            $enrolledCourseIds = $user->courseStudents()->pluck('course_id');
+
+            $schedules = Schedule::whereHas('activity', function ($query) use ($enrolledCourseIds) {
+                    $query->whereIn('course_id', $enrolledCourseIds);
+                })
+                ->with('activity.course')
+                ->latest()
+                ->paginate(10);
+
+        } elseif ($user->hasRole('Tutor')) {
+            // Ambil ID course milik tutor lewat relasi courses() di model User
+            $tutorCourseIds = $user->courses()->pluck('courses.id');
+
+            $schedules = Schedule::whereHas('activity', function ($query) use ($tutorCourseIds) {
+                    $query->whereIn('course_id', $tutorCourseIds);
+                })
+                ->with('activity.course')
+                ->latest()
+                ->paginate(10);
+
+        } else {
+            $schedules = Schedule::with('activity.course')
+                ->latest()
+                ->paginate(10);
+        }
+
         return view('schedule.index', compact('schedules'));
     }
 

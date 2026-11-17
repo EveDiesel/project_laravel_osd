@@ -142,18 +142,49 @@
                     @endhasanyrole
 
                    <!-- student -->
-                    @role('Student')
+                   @role('Student')
+                        @php
+                            $user = Auth::user();
+                            $courseId = optional($courseQuiz->courseContent)->course_id;
+                            $courseStudent = $user->courseStudents()->where('course_id', $courseId)->first();
+                            $currentPercentage = $courseStudent->percentage ?? 0;
+
+                            $fixedTotalQuizzes = 8;
+                            $incrementPerQuiz = 100 / $fixedTotalQuizzes;
+                            $quizzesCompletedCount = ($incrementPerQuiz > 0) ? floor($currentPercentage / $incrementPerQuiz) : 0;
+
+                            $allQuizzes = \App\Models\Course_Quiz::whereHas('courseContent', function($q) use ($courseId) {
+                                $q->where('course_id', $courseId);
+                            })->get();
+
+                            $quizIndex = $allQuizzes->search(function ($item) use ($courseQuiz) {
+                                return $item->id === $courseQuiz->id;
+                            });
+
+                            $isLocked = ($quizIndex !== false && $quizIndex < $quizzesCompletedCount);
+                        @endphp
+
                         @if(empty($courseQuiz->questions))
-                            <p style="color: #94a3b8; text-align: center; padding: 30px;">Quiz ini belum memiliki soal.</p>
+                            <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                                <p>Quiz untuk sesi ini belum memiliki soal.</p>
+                            </div>
+                        @elseif($isLocked)
+                            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 30px; margin-bottom: 20px; text-align: center;">
+                                <span style="font-size: 2rem;">!!</span>
+                                <h3 style="font-size: 1.1rem; font-weight: 600; color: #0f172a; margin-top: 8px;">Quiz Sesi Ini Sudah Selesai</h3>
+                                <p style="font-size: 0.9rem; color: #64748b; margin-top: 4px;">Anda sudah menyelesaikan quiz ini. Sesi telah terkunci.</p>
+                            </div>
+
+                            <div style="margin-top: 25px;">
+                                <a href="{{ route('course-quiz.index') }}" class="btn-action" style="background: #334155; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 0.9rem; display: inline-block;">Kembali ke Daftar Quiz</a>
+                            </div>
                         @else
-                           
                             <form action="{{ route('course-quiz.submit', $courseQuiz->id) }}" method="POST">
                                 @csrf
                                 <div style="display: flex; flex-direction: column; gap: 20px;">
                                     @foreach($courseQuiz->questions as $index => $q)
-                                        <div style="padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                            <p style="font-weight: 600; margin-bottom: 12px;">{{ $index + 1 }}. {{ $q['question'] }}</p>
-                                            
+                                        <div style="padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); background: #ffffff;">
+                                            <p style="font-weight: 600; margin-bottom: 12px; color: #0f172a;">{{ $index + 1 }}. {{ $q['question'] }}</p>
                                             <div style="display: flex; flex-direction: column; gap: 8px;">
                                                 <label style="cursor: pointer;"><input type="radio" name="answers[{{ $q['id'] }}]" value="A" required> A. {{ $q['option_a'] }}</label>
                                                 <label style="cursor: pointer;"><input type="radio" name="answers[{{ $q['id'] }}]" value="B"> B. {{ $q['option_b'] }}</label>
@@ -171,12 +202,9 @@
                             </form>
                         @endif
                     @endrole
-
                 </div>
             </div>
         </main>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('userMenuBtn');

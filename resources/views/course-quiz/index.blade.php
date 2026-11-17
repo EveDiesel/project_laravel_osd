@@ -35,7 +35,7 @@
             gap: 24px;
         }
         .course-group-card {
-            border: 1px solid var(--border-color, #cbd5e1); /* Mengikuti variabel system jika ada, fallback ke abu-abu */
+            border: 1px solid var(--border-color, #cbd5e1);
             border-radius: 12px;
             padding: 20px;
         }
@@ -136,9 +136,6 @@
                             @role('Tutor')
                                 <h2 class="card-title" style="font-size: 1.25rem;">Kelola Quiz Berdasarkan Materi</h2>
                                 <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Daftar quiz untuk pengajaran.</p>
-                            @elserole('Student')
-                                <h2 class="card-title" style="font-size: 1.25rem;">Daftar Quiz Belajar Saya</h2>
-                                <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Pilih materi dan kerjakan quiz untuk meningkatkan progress belajarmu.</p>
                             @else
                                 <h2 class="card-title" style="font-size: 1.25rem;">Daftar Course Quizzes</h2>
                                 <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Kelola daftar quiz dan soal latihan OSEDU.</p>
@@ -151,9 +148,7 @@
                         @endhasanyrole
                     </div>
 
-
-                    {{-- ================= 1. TAMPILAN KHUSUS TUTOR ================= --}}
-                    @role('Tutor')
+                    @hasanyrole('Tutor|Admin')
                         <div class="tutor-group-container">
                             @php
                                 $groupedQuizzes = $courseQuizzes->groupBy(function($item) {
@@ -180,10 +175,21 @@
                                                     </span>
                                                 </div>
                                                 
-                                                <div>
-                                                    <a href="{{ route('course-quiz.show', $quiz->id) }}" class="btn-action" style="background-color: #3b82f6; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; display: block; text-align: center; font-size: 0.8rem; font-weight: 500;">
+                                                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                                                    <a href="{{ route('course-quiz.show', $quiz->id) }}" class="btn-action" style="background-color: #3b82f6; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500;">
                                                         Kelola Soal
                                                     </a>
+
+                                                    <!-- Form Hapus Quiz -->
+                                                    <form action="{{ route('course-quiz.destroy', $quiz->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus quiz &quot;{{ $quiz->name }}&quot; ini?')" style="margin: 0;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="background-color: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; justify-content: center;" title="Hapus Quiz">
+                                                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -195,98 +201,87 @@
                                 </div>
                             @endforelse
                         </div>
+                        
+                        @elserole('Student|Tutor')
+                            <div class="tutor-group-container">
+                                @php
+                                    $groupedQuizzes = $courseQuizzes->groupBy(function($item) {
+                                        return $item->courseContent->title ?? 'Materi Pembelajaran';
+                                    });
+                                @endphp
 
+                                @forelse($groupedQuizzes as $contentTitle => $quizzes)
+                                    <div class="course-group-card" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                        
+                                        <!-- Judul Materi Course Content -->
+                                        <div class="course-group-title" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                                            <svg style="width: 20px; height: 20px; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                            </svg>
+                                            <span>{{ $contentTitle }}</span>
+                                        </div>
 
-                    {{-- ================= 2. TAMPILAN KHUSUS STUDENT ================= --}}
-                    @elserole('Student')
-                        <div class="tutor-group-container">
-                            @php
-                                $groupedQuizzes = $courseQuizzes->groupBy(function($item) {
-                                    return $item->courseContent->title ?? 'Materi Lainnya';
-                                });
-                            @endphp
+                                        <!-- Grid Kartu Quiz -->
+                                        <div class="quiz-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+                                            @foreach($quizzes as $quiz)
+                                                @php
+                                                    $isSubmitted = isset($quiz->is_submitted) ? $quiz->is_submitted : false; 
+                                                @endphp
 
-                            @forelse($groupedQuizzes as $contentTitle => $quizzes)
-                                <div class="course-group-card">
-                                    <div class="course-group-title">
-                                        <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                        </svg>
-                                        <span>{{ $contentTitle }}</span>
-                                    </div>
+                                                <div class="quiz-item-card" style="border: 1px solid {{ $isSubmitted ? '#bbf7d0' : '#e2e8f0' }}; background: {{ $isSubmitted ? '#f0fdf4' : '#ffffff' }}; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s ease;">
+                                                    
+                                                    <div>
+                                                        <h4 style="font-size: 0.95rem; font-weight: 600; color: #0f172a; margin-bottom: 6px;">
+                                                            {{ $quiz->name ?? 'Quiz Tanpa Nama' }}
+                                                        </h4>
 
-                                    <div class="quiz-cards-grid">
-                                        @foreach($quizzes as $quiz)
-                                            <div class="quiz-item-card">
-                                                <div>
-                                                    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 6px;">{{ $quiz->name }}</h4>
-                                                    <span style="display: inline-block; border: 1px solid currentColor; opacity: 0.8; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; margin-bottom: 12px;">
-                                                        {{ is_array($quiz->questions) ? count($quiz->questions) : 0 }} Soal
-                                                    </span>
+                                                        <!-- Jumlah Soal & Badge Status Pengerjaan -->
+                                                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;">
+                                                            <span style="display: inline-block; background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 500;">
+                                                                {{ is_array($quiz->questions) ? count($quiz->questions) : 0 }} Soal
+                                                            </span>
+
+                                                            @if($isSubmitted)
+                                                                <span style="display: inline-flex; align-items: center; gap: 4px; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
+                                                                    <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                                    Sudah Dikerjakan
+                                                                </span>
+                                                            @else
+                                                                <span style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 500;">
+                                                                    Belum Dikerjakan
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Tombol Aksi (Kondisional: Kerjakan vs Lihat Hasil / Terkunci) -->
+                                                    <div>
+                                                        @if($isSubmitted)
+                                                            <!-- Jika sudah dikerjakan, tombol berubah jadi Lihat Hasil & Terkunci -->
+                                                            <a href="{{ route('course-quiz.show', $quiz->id) }}" class="btn-action" style="background-color: #059669; color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; display: block; text-align: center; font-size: 0.8rem; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                                                Quiz Selesai
+                                                            </a>
+                                                        @else
+                                                            <!-- Jika belum, tombol untuk mulai mengerjakan -->
+                                                            <a href="{{ route('course-quiz.show', $quiz->id) }}" class="btn-action" style="background-color: #2563eb; color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; display: block; text-align: center; font-size: 0.8rem; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                                                Kerjakan Quiz
+                                                            </a>
+                                                        @endif
+                                                    </div>
+
                                                 </div>
-                                                
-                                                <div>
-                                                    <a href="{{ route('course-quiz.show', $quiz->id) }}" class="btn-action" style="background-color: #10b981; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; display: block; text-align: center; font-size: 0.8rem; font-weight: 500;">
-                                                        Kerjakan Quiz
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
+
                                     </div>
-                                </div>
-                            @empty
-                                <div style="text-align: center; opacity: 0.7; padding: 40px;">
-                                    Belum ada quiz yang tersedia untuk dikerjakan.
-                                </div>
-                            @endforelse
-                        </div>
-
-
-                    {{-- ================= 3. TAMPILAN UNTUK ADMIN ================= --}}
-                    @else
-                        <div class="table-responsive">
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <thead>
-                                    <tr>
-                                        <th>NO</th>
-                                        <th>COURSE CONTENT</th>
-                                        <th>NAME</th>
-                                        <th>QUESTIONS</th>
-                                        <th>ACTIONS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($courseQuizzes as $index => $courseQuiz)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $courseQuiz->courseContent->title ?? '-' }}</td>
-                                        <td>{{ $courseQuiz->name ?? '-' }}</td>
-                                        <td>
-                                            <span class="badge" style="border: 1px solid currentColor; opacity: 0.9; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500;">
-                                                {{ is_array($courseQuiz->questions) ? count($courseQuiz->questions) : 0 }} Soal
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('course-quiz.show', $courseQuiz->id) }}" class="btn-action" style="background-color: #3b82f6; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; display: inline-block; margin-right: 4px; font-size: 0.85rem;">Kelola Soal</a>
-                                            
-                                            <a href="{{ route('course-quiz.edit', $courseQuiz->id) }}" class="btn-action btn-edit">Edit</a>
-                                            
-                                            <form action="{{ route('course-quiz.destroy', $courseQuiz->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn-action btn-delete" style="border:none; cursor:pointer;" onclick="return confirm('Yakin ingin menghapus quiz ini?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="5" style="text-align: center; opacity: 0.7; padding: 20px;">Tidak ada data course quiz.</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    @endrole
+                                @empty
+                                    <div style="text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 40px; color: #64748b;">
+                                        <p style="font-size: 0.95rem; font-weight: 500; margin-bottom: 4px;">Belum ada quiz yang tersedia</p>
+                                        <p style="font-size: 0.8rem; opacity: 0.8;">Quiz akan muncul di sini setelah Anda terdaftar ke dalam course yang sesuai.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        @endrole
 
                     <!-- Pagination -->
                     @if(method_exists($courseQuizzes, 'links'))
@@ -299,7 +294,7 @@
             </div>
         </main>
 
-    </div>                        
+    </div>                    
 
     <!-- Script JavaScript Dropdown Profile -->
     <script>

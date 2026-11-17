@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Course_Content;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +19,8 @@ class Course_Quiz extends Model
 
     protected $casts = [
         'questions' => 'array',
+        'completed_quizzes' => 'array',
+        'is_complete' => 'boolean',
     ];
 
     public function courseContent()

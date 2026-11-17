@@ -6,6 +6,7 @@ use App\Models\Course_Quiz;
 use App\Models\Course_Content;
 use App\Models\Course_Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseQuizController extends Controller
 {
@@ -14,7 +15,41 @@ class CourseQuizController extends Controller
      */
     public function index()
     {
-        $courseQuizzes = Course_Quiz::with('courseContent')->paginate(10);
+        $user = Auth::user();
+
+        if ($user->hasRole('Student')) {
+            $enrolledCourseIds = $user->courseStudents()->pluck('course_id');
+
+            $courseStudent = Course_Student::where('user_id', $user->id)->first();
+            $currentPercentage = $courseStudent->percentage ?? 0;
+
+            $courseQuizzes = Course_Quiz::whereHas('courseContent', function ($query) use ($enrolledCourseIds) {
+                $query->whereIn('course_id', $enrolledCourseIds);
+            })->with('courseContent')->get();
+
+            $fixedTotalQuizzes = 8;
+            $incrementPerQuiz = 100 / $fixedTotalQuizzes;
+
+            $quizzesCompletedCount = ($incrementPerQuiz > 0) ? floor($currentPercentage / $incrementPerQuiz) : 0;
+
+            foreach ($courseQuizzes as $index => $quiz) {
+                $quiz->is_submitted = ($index < $quizzesCompletedCount);
+            }
+
+        } elseif ($user->hasRole('Tutor')) {
+        $tutorCourseIds = $user->courses()->pluck('courses.id');
+
+        $courseQuizzes = Course_Quiz::whereHas('courseContent', function ($query) use ($tutorCourseIds) {
+                $query->whereIn('course_id', $tutorCourseIds);
+            })
+            ->with('courseContent.course')
+            ->latest()
+            ->paginate(10);
+
+        } else {
+            $courseQuizzes = Course_Quiz::with('courseContent')->paginate(10);
+        }
+
         return view('course-quiz.index', compact('courseQuizzes'));
     }
 
@@ -158,7 +193,6 @@ class CourseQuizController extends Controller
         $totalQuestions = count($questions);
         $correctCount = 0;
 
-        // Koreksi jawaban berdasarkan array JSON
         foreach ($questions as $question) {
             $qId = $question['id'];
             if (isset($studentAnswers[$qId]) && $studentAnswers[$qId] === $question['correct_answer']) {
@@ -167,8 +201,6 @@ class CourseQuizController extends Controller
         }
 
         $score = $totalQuestions > 0 ? ($correctCount / $totalQuestions) * 100 : 0;
-
-        // Update progress ke tabel course_students
         $courseId = $quiz->courseContent->course_id ?? null;
 
         if ($courseId) {
@@ -177,12 +209,10 @@ class CourseQuizController extends Controller
                                 ->first();
 
             if ($courseStudent) {
-                $totalQuizzesInCourse = Course_Quiz::whereHas('courseContent', function($query) use ($courseId) {
-                    $query->where('course_id', $courseId);
-                })->count();
+                $fixedTotalQuizzes = 8;
+                $incrementPerQuiz = 100 / $fixedTotalQuizzes;
                 
                 $currentPercentage = $courseStudent->percentage ?? 0;
-                $incrementPerQuiz = $totalQuizzesInCourse > 0 ? (100 / $totalQuizzesInCourse) : 12.5;
                 
                 $newPercentage = min(100, $currentPercentage + $incrementPerQuiz);
                 $isComplete = ($newPercentage >= 100);
@@ -195,6 +225,6 @@ class CourseQuizController extends Controller
             }
         }
 
-        return redirect()->route('course-quiz.index')->with('success', "Quiz berhasil dikumpulkan! Skor Anda: " . number_format($score, 0) . ". Progress diperbarui.");
+        return redirect()->route('course-quiz.index')->with('success', "Quiz berhasil dikumpulkan! Skor: " . number_format($score, 0) . ". Progress diperbarui.");
     }
 }

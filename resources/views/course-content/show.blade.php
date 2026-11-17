@@ -231,7 +231,7 @@
                         @role('Admin|Tutor')
 
                         <div class="quiz-info-section" style="margin-top: 15px; padding: 10px; border-radius: 8px;">
-                                <p style="color: #cbd5e1; font-size: 0.9rem;">
+                                <p style="font-size: 0.9rem;">
                                     Total Quiz untuk materi ini: 
                                     <strong style="color: #38bdf8;">{{ $contents->quizzes->count() }} Quiz</strong>
                                 </p>
